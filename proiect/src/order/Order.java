@@ -1,7 +1,6 @@
 package order;
 
-
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import business.Business;
 import driver.Driver;
@@ -18,7 +17,7 @@ public class Order implements Comparable<Order> {
 	
 	private Driver driver;
 		
-	private Date timePlacedOrder;
+	private LocalDateTime timePlacedOrder;
 	
 	private OrderStatus status;
 	
@@ -33,7 +32,7 @@ public class Order implements Comparable<Order> {
 	 * @param status
 	 * @param data
 	 */
-	public Order(int id, User client, Business business, Driver driver, Date timePlacedOrder, OrderStatus status,
+	public Order(int id, User client, Business business, Driver driver, LocalDateTime timePlacedOrder, OrderStatus status,
 			OrderData data) {
 		super();
 		this.id = id;
@@ -112,7 +111,7 @@ public class Order implements Comparable<Order> {
 	/**
 	 * @return the timePlacedOrder
 	 */
-	public Date getTimePlacedOrder() {
+	public LocalDateTime getTimePlacedOrder() {
 		return timePlacedOrder;
 	}
 
@@ -120,7 +119,7 @@ public class Order implements Comparable<Order> {
 	/**
 	 * @param timePlacedOrder the timePlacedOrder to set
 	 */
-	public void setTimePlacedOrder(Date timePlacedOrder) {
+	public void setTimePlacedOrder(LocalDateTime timePlacedOrder) {
 		this.timePlacedOrder = timePlacedOrder;
 	}
 

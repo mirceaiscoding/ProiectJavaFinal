@@ -1,8 +1,8 @@
 package order;
 
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import business.Business;
@@ -57,7 +57,7 @@ public class OrderFactory {
 			double ammount = orderData.getPrice();
 			System.out.println("Transfering money from client to business. Ammount: " + ammount);
 			AccountBalanceHolder.exchangeMoney(client, business, ammount);
-			Order order = new Order(currentId++, client, business, null, new Date(), OrderStatus.Sent, orderData);
+			Order order = new Order(currentId++, client, business, null, LocalDateTime.now(), OrderStatus.Sent, orderData);
 			client.addOrder(order);
 			business.addOrder(order);
 			return order;
