@@ -12,25 +12,25 @@ import app.entities.user.User;
 
 public interface IActionsService {
 	
-	public List<User> getUsers();	
+	List<User> getUsers();	
 
-	public List<Business> getBusinesses();
+	List<Business> getBusinesses();
 	
-	public List<Driver> getFreeDrivers();
+	List<Driver> getFreeDrivers();
 
-	public void addNewUser(User user);
+	void addNewUser(User user);
 
-	public double addFoundsToUser(User user, double ammount);
+	double addFoundsToUser(User user, double ammount);
 
-	public void addNewDriver(Driver driver);
+	void addNewDriver(Driver driver);
 
-	public void addProductToBusiness(Product product, Business business);
+	void addProductToBusiness(Product product, Business business);
 
-	public void addNewBusiness(Business restaurant1);
+	void addNewBusiness(Business restaurant1);
 
-	public Order getOrderById(int id, List<Order> orders);
+	Order getOrderById(int id, List<Order> orders);
 
-	public List<Order> getOrdersByStatus(OrderStatus status);
+	List<Order> getOrdersByStatus(OrderStatus status);
 	
 	
 	// Order process
@@ -42,7 +42,7 @@ public interface IActionsService {
 	 * @param businessToOrderFrom
 	 * @return the order factory
 	 */
-	public OrderFactory createNewOrderFactory(User userThatOrders, Business businessToOrderFrom);
+	OrderFactory createNewOrderFactory(User userThatOrders, Business businessToOrderFrom);
 	
 	/**
 	 * Place an order created using the order factory.
@@ -51,7 +51,7 @@ public interface IActionsService {
 	 * @param orderFactory
 	 * @return the order
 	 */
-	public Order placeOrder(OrderFactory orderFactory);
+	Order placeOrder(OrderFactory orderFactory);
 	
 	/**
 	 * Order must have status Sent.
@@ -60,7 +60,7 @@ public interface IActionsService {
 	 * 
 	 * @param orderToPrepare
 	 */
-	public void prepareOrder(Order orderToPrepare);
+	void prepareOrder(Order orderToPrepare);
 
 	/**
 	 * Order must have status AwaitingDelivery.
@@ -70,7 +70,7 @@ public interface IActionsService {
 	 * @param orderToPickup
 	 * @param freeDriver the driver that picks up the order
 	 */
-	public void pickupOrder(Order orderToPickup, Driver freeDriver);
+	void pickupOrder(Order orderToPickup, Driver freeDriver);
 
 	/**
 	 * Order must have status Delivering.
@@ -79,7 +79,7 @@ public interface IActionsService {
 	 * 
 	 * @param orderToDeliver
 	 */
-	public void deliverOrder(Order orderToDeliver);
+	void deliverOrder(Order orderToDeliver);
 	
 	/**
 	 * Order must have status Delivering.
@@ -89,6 +89,6 @@ public interface IActionsService {
 	 * @param orderToGet
 	 * @param tip amount to tip
 	 */
-	public void getOrderAndTip(Order orderToGet, double tip);
+	void getOrderAndTip(Order orderToGet, double tip);
 	
 }
