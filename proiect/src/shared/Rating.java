@@ -51,10 +51,11 @@ public class Rating {
 	 * score = sum(ratings) / numberOfRatings
 	 * 
 	 * @param newScore number between 1 and 10
+	 * @throws RatingOutOfBoundsException when newScore is not between 1 and 10
 	 */
-	public void addReview(int newScore) {
+	public void addReview(int newScore) throws RatingOutOfBoundsException {
 		if (score < 1 || score >10) {
-			throw new IllegalArgumentException("Score must be between 1 and 10");
+			throw new RatingOutOfBoundsException("Score must be between 1 and 10");
 		}
 		double totalScore = score * numberOfRatings + newScore;
 		numberOfRatings += 1;
