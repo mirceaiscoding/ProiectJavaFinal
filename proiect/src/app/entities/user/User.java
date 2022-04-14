@@ -1,12 +1,12 @@
-package user;
+package app.entities.user;
 
 import java.util.Scanner;
 import java.util.TreeSet;
 
-import order.Order;
-import order.OrderStatus;
-import shared.AccountBalanceHolder;
-import shared.Person;
+import app.entities.AccountBalanceHolder;
+import app.entities.Person;
+import app.entities.order.Order;
+import app.entities.order.OrderStatus;
 
 public class User extends Person {
 

@@ -1,13 +1,13 @@
-package order;
+package app.entities.order;
 
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import business.Business;
-import shared.AccountBalanceHolder;
-import user.User;
+import app.entities.AccountBalanceHolder;
+import app.entities.business.Business;
+import app.entities.user.User;
 
 
 public class OrderFactory {

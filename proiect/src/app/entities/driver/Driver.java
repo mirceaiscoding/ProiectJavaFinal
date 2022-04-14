@@ -1,13 +1,13 @@
-package driver;
+package app.entities.driver;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import order.Order;
-import order.OrderStatus;
-import shared.Person;
-import shared.Rating;
+import app.entities.Person;
+import app.entities.Rating;
+import app.entities.order.Order;
+import app.entities.order.OrderStatus;
  
 
 public class Driver extends Person{

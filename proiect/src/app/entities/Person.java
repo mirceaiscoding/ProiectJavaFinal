@@ -1,4 +1,4 @@
-package shared;
+package app.entities;
 
 import java.util.Scanner;
 

@@ -1,14 +1,14 @@
-package app;
+package app.services;
 
 import java.util.List;
 
-import business.Business;
-import business.Product;
-import driver.Driver;
-import order.Order;
-import order.OrderFactory;
-import order.OrderStatus;
-import user.User;
+import app.entities.business.Business;
+import app.entities.business.Product;
+import app.entities.driver.Driver;
+import app.entities.order.Order;
+import app.entities.order.OrderFactory;
+import app.entities.order.OrderStatus;
+import app.entities.user.User;
 
 public interface IActionsService {
 	

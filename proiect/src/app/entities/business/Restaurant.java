@@ -1,10 +1,10 @@
-package business;
+package app.entities.business;
 
 
 import java.util.HashSet;
 import java.util.Set;
 
-import shared.Rating;
+import app.entities.Rating;
 
 
 public class Restaurant extends Business{

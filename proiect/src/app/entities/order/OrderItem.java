@@ -1,9 +1,9 @@
-package order;
+package app.entities.order;
 
 
 import java.util.Scanner;
 
-import business.Product;
+import app.entities.business.Product;
 
 public class OrderItem {
 

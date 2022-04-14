@@ -1,4 +1,4 @@
-package shared;
+package app.entities;
 
 public class Rating {
 	

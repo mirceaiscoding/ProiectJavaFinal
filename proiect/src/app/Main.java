@@ -3,11 +3,20 @@ package app;
 import java.util.List;
 import java.util.Scanner;
 
-import business.*;
-import driver.*;
-import order.*;
-import user.*;
-import shared.*;
+import app.entities.business.Business;
+import app.entities.business.Product;
+import app.entities.business.Restaurant;
+import app.entities.business.BusinessFactory;
+import app.entities.driver.Driver;
+import app.entities.order.Order;
+import app.entities.order.OrderFactory;
+import app.entities.order.OrderItem;
+import app.entities.order.OrderStatus;
+import app.entities.user.*;
+import app.services.ActionsService;
+import app.services.IActionsService;
+import app.entities.Rating;
+
 
 public class Main {
 	

@@ -1,6 +1,6 @@
-package business;
+package app.entities.business;
 
-import shared.Rating;
+import app.entities.Rating;
 
 public class GroceryShop extends Business {
 

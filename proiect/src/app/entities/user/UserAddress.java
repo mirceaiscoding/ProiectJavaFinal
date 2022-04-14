@@ -1,4 +1,4 @@
-package user;
+package app.entities.user;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package business;
+package app.entities.business;
 
 import java.util.Scanner;
 

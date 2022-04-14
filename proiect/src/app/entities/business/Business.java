@@ -1,13 +1,13 @@
-package business;
+package app.entities.business;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import order.Order;
-import order.OrderStatus;
-import shared.AccountBalanceHolder;
-import shared.Rating;
+import app.entities.AccountBalanceHolder;
+import app.entities.Rating;
+import app.entities.order.Order;
+import app.entities.order.OrderStatus;
 
 
 public class Business extends AccountBalanceHolder{

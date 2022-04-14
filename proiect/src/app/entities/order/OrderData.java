@@ -1,4 +1,4 @@
-package order;
+package app.entities.order;
 
 
 import java.util.List;

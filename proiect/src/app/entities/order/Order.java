@@ -1,10 +1,10 @@
-package order;
+package app.entities.order;
 
 import java.time.LocalDateTime;
 
-import business.Business;
-import driver.Driver;
-import user.User;
+import app.entities.business.Business;
+import app.entities.driver.Driver;
+import app.entities.user.User;
 
 
 public class Order implements Comparable<Order> {
