@@ -12,6 +12,8 @@ public class OrderItem {
 	private int quantity;
 	
 	/**
+	 * Construct a new OrderItem
+	 * 
 	 * @param product
 	 * @param quantity
 	 */
@@ -22,8 +24,9 @@ public class OrderItem {
 	}
 	
 	/**
-	 * @param product
-	 * @param quantity
+	 * Construct a new OrderItem with data from the scanner
+	 * 
+	 * @param scanner
 	 */
 	public OrderItem(Scanner scanner) {
 		product = new Product(scanner);
