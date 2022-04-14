@@ -7,6 +7,7 @@ import app.entities.business.Business;
 import app.entities.business.Product;
 import app.entities.business.Restaurant;
 import app.entities.business.BusinessFactory;
+import app.entities.business.BusinessType;
 import app.entities.driver.Driver;
 import app.entities.order.Order;
 import app.entities.order.OrderFactory;
@@ -105,11 +106,11 @@ public class Main {
 				}
 				case 1: {
 					// Add business
-					System.out.println("Business type: [Restaurant], [GroceryShop], [other]");
+					System.out.println("Business type: [RESTAURANT], [GROCERY_STORE], [other]");
 					String type = scanner.nextLine();
 					System.out.println("Business name:");
 					String name = scanner.nextLine();
-					Business business = BusinessFactory.makeBusiness(type, name);
+					Business business = BusinessFactory.makeBusiness(BusinessType.valueOf(type), name);
 					service.addNewBusiness(business);
 					printDelimiter();
 					System.out.println("Added business:\n" + business);
