@@ -6,11 +6,6 @@ public class Rating {
 	
 	private int numberOfRatings;
 	
-	public Rating() {
-		score = 0;
-		numberOfRatings = 0;
-	}
-	
 	/**
 	 * @param score
 	 * @param numberOfRatings
@@ -20,6 +15,8 @@ public class Rating {
 		this.score = score;
 		this.numberOfRatings = numberOfRatings;
 	}
+
+	public Rating() {}
 
 	/**
 	 * @return the score
