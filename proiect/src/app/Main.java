@@ -59,7 +59,7 @@ public class Main {
 		IActionsService service = ActionsService.getInstance();
 		
 		// Initial data
-		User user1 = new User("Bina Mircea", "bina.mircea@yahoo.com", "0777123123", new UserAddress(Country.Romania , City.Craiova, "str Balcescu", "12"));
+		User user1 = new User("Bina Mircea", "bina.mircea@yahoo.com", "0777123123", new UserAddress(Country.ROMANIA , City.CRAIOVA, "str Balcescu", "12"));
 		service.addNewUser(user1);
 		service.addFoundsToUser(user1, 100);
 		
@@ -198,7 +198,7 @@ public class Main {
 				case 7:
 					// Prepare order
 					System.out.println("Enter order number:");
-					List<Order> ordersToPrepare = service.getOrdersByStatus(OrderStatus.Preparing);
+					List<Order> ordersToPrepare = service.getOrdersByStatus(OrderStatus.PREPERING);
 					if (ordersToPrepare.isEmpty()) {
 						System.out.println("No orders to prepare. Place an order first");
 						break;
@@ -219,7 +219,7 @@ public class Main {
 					break;
 				case 8:
 					// Find driver to pickup order
-					List<Order> ordersAwaitingPickup = service.getOrdersByStatus(OrderStatus.AwaitingPickUp);
+					List<Order> ordersAwaitingPickup = service.getOrdersByStatus(OrderStatus.AWAITING_PICKUP);
 					if (ordersAwaitingPickup.isEmpty()) {
 						System.out.println("No orders awaiting pickup. Prepare an order first");
 						break;
@@ -247,7 +247,7 @@ public class Main {
 					break;
 				case 9:
 					// Deliver order
-					List<Order> ordersToDeliver = service.getOrdersByStatus(OrderStatus.Delivering);
+					List<Order> ordersToDeliver = service.getOrdersByStatus(OrderStatus.DELIVERING);
 					if (ordersToDeliver.isEmpty()) {
 						System.out.println("No orders to deliver. Pickup an order first");
 						break;
@@ -264,7 +264,7 @@ public class Main {
 					break;
 				case 10:
 					// Get order and tip
-					List<Order> ordersToGet = service.getOrdersByStatus(OrderStatus.Arrived);
+					List<Order> ordersToGet = service.getOrdersByStatus(OrderStatus.ARRIVED);
 					if (ordersToGet.isEmpty()) {
 						System.out.println("No orders to get. Deliver an order first");
 						break;

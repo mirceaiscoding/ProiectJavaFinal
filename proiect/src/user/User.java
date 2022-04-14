@@ -77,10 +77,10 @@ public class User extends Person {
 		if (order.getClient() != this) {
 			throw new IllegalArgumentException("The order is not for this client");
 		}
-		if (order.getStatus() != OrderStatus.Arrived) {
+		if (order.getStatus() != OrderStatus.ARRIVED) {
 			throw new IllegalArgumentException("The order has not arrived yet");
 		}
-		order.setStatus(OrderStatus.Done);
+		order.setStatus(OrderStatus.DONE);
 		
 		// Give tip to driver
 		AccountBalanceHolder.exchangeMoney(this, order.getDriver(), tip);

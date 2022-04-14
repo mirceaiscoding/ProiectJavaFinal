@@ -1,5 +1,5 @@
 package order;
 
 public enum OrderStatus {
-	Sent, Preparing, AwaitingPickUp, Delivering, Arrived, Done, Cancelled
+	SENT, PREPERING, AWAITING_PICKUP, DELIVERING, ARRIVED, DONE, CANCELLED
 }

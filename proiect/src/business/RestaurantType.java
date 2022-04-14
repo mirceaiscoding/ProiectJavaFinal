@@ -1,5 +1,5 @@
 package business;
 
 public enum RestaurantType {
-	Sushi, SteakHouse, Italian, French, FastFood, Brunch
+	SUSHI, STEAK_HOUSE, ITALIAN, FRENCH, FAST_FOOD, BRUNCH
 }

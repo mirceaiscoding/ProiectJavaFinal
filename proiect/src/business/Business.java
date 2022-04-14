@@ -94,11 +94,11 @@ public class Business extends AccountBalanceHolder{
 	 * @throws IllegalArgumentException if order is not for this business or the status is not "Sent"
 	 */
 	public void addOrder(Order order) {
-		if (order.getBusiness() != this || order.getStatus() != OrderStatus.Sent) {
+		if (order.getBusiness() != this || order.getStatus() != OrderStatus.SENT) {
 			throw new IllegalArgumentException("This order can not be added");
 		}
 		this.futureOrders.add(order);
-		order.setStatus(OrderStatus.Preparing);
+		order.setStatus(OrderStatus.PREPERING);
 	}
 	
 	/**
@@ -106,12 +106,12 @@ public class Business extends AccountBalanceHolder{
 	 * @throws IllegalArgumentException if order is not in futureOrders or status is not "Preparing"
 	 */
 	public void completeOrder(Order order) {
-		if (!futureOrders.contains(order) || order.getStatus() != OrderStatus.Preparing) {
+		if (!futureOrders.contains(order) || order.getStatus() != OrderStatus.PREPERING) {
 			throw new IllegalArgumentException("This order can not be completed");
 		}
 		this.completedOrders.add(order);
 		this.futureOrders.remove(order);
-		order.setStatus(OrderStatus.AwaitingPickUp);
+		order.setStatus(OrderStatus.AWAITING_PICKUP);
 	}
 
 	/**

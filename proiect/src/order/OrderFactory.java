@@ -57,7 +57,7 @@ public class OrderFactory {
 			double ammount = orderData.getPrice();
 			System.out.println("Transfering money from client to business. Ammount: " + ammount);
 			AccountBalanceHolder.exchangeMoney(client, business, ammount);
-			Order order = new Order(currentId++, client, business, null, LocalDateTime.now(), OrderStatus.Sent, orderData);
+			Order order = new Order(currentId++, client, business, null, LocalDateTime.now(), OrderStatus.SENT, orderData);
 			client.addOrder(order);
 			business.addOrder(order);
 			return order;

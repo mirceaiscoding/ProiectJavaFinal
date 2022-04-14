@@ -1,5 +1,5 @@
 package user;
 
 public enum City {
-	Bucharest, Craiova, Cluj, Iasi
+	BUCHAREST, CRAIOVA, CLUJ, IASI
 }

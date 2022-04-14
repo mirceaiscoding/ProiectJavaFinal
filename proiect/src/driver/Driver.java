@@ -100,12 +100,12 @@ public class Driver extends Person{
 		if (order.getDriver() != null) {
 			throw new IllegalArgumentException("Order is already being delivered by another driver");
 		}
-		if (order.getStatus() != OrderStatus.AwaitingPickUp) {
+		if (order.getStatus() != OrderStatus.AWAITING_PICKUP) {
 			throw new IllegalArgumentException("Order is not awaiting pick up");
 		}
 		currentOrder = order;
 		order.setDriver(this);
-		order.setStatus(OrderStatus.Delivering);
+		order.setStatus(OrderStatus.DELIVERING);
 	}
 	
 	/**
@@ -118,10 +118,10 @@ public class Driver extends Person{
 		if (isFree()) {
 			throw new IllegalStateException("No order is being delivered");
 		}
-		if (currentOrder.getStatus() != OrderStatus.Delivering) {
+		if (currentOrder.getStatus() != OrderStatus.DELIVERING) {
 			throw new IllegalArgumentException("Order is not being delivered");
 		}
-		currentOrder.setStatus(OrderStatus.Arrived);
+		currentOrder.setStatus(OrderStatus.ARRIVED);
 		deliveredOrders.add(currentOrder);
 		currentOrder = null;
 	}
