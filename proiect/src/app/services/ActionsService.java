@@ -158,7 +158,7 @@ public class ActionsService implements IActionsService{
 	 * @return the orders with this status
 	 */
 	public List<Order> getOrdersByStatus(OrderStatus status) {
-		List<Order> filteredOrders = new ArrayList<Order>();
+		List<Order> filteredOrders = new ArrayList<>();
 		for (Order order : orders) {
 			if (order.getStatus().equals(status)) {
 				filteredOrders.add(order);
