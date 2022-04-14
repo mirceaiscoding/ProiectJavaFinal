@@ -83,7 +83,7 @@ public class User extends Person {
 		order.setStatus(OrderStatus.Done);
 		
 		// Give tip to driver
-		AccountBalanceHolder.ExchangeMoney(this, order.getDriver(), tip);
+		AccountBalanceHolder.exchangeMoney(this, order.getDriver(), tip);
 	}
 	
 	@Override

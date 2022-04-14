@@ -47,7 +47,7 @@ public class AccountBalanceHolder {
 	 * @param to receiving account
 	 * @param amount the sum being exchanged
 	 */
-	public static void ExchangeMoney(AccountBalanceHolder from, AccountBalanceHolder to, double amount) {
+	public static void exchangeMoney(AccountBalanceHolder from, AccountBalanceHolder to, double amount) {
 		from.withdrawFounds(amount);
 		to.addFounds(amount);
 	}
