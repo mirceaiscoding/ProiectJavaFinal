@@ -170,15 +170,8 @@ public class Main {
 						String response = scanner.nextLine();
 						switch (response) {
 						case "Add":
-							System.out.println("Enter product number:");
-							businessToOrderFrom.printProducts();
-							while(!scanner.hasNextInt()) {
-								scanner.next();
-							}
-							int productIndex = scanner.nextInt();
-							scanner.nextLine();
+							Product productToAdd = pickProductFromBusiness(scanner, service, businessToOrderFrom);
 							System.out.println("Quantity:");
-							Product productToAdd = businessToOrderFrom.getProducts().get(productIndex); 
 							while(!scanner.hasNextInt()) {
 								scanner.next();
 							}
@@ -189,7 +182,7 @@ public class Main {
 						case "Finish":
 							if (newOrderFactory.getOrderItems().isEmpty()) {
 								System.out.println("Can't place an empty order");
-							} else {								
+							} else {
 								finish = true;
 							}
 							break;
@@ -199,10 +192,12 @@ public class Main {
 						}
 					}
 					Order order = service.placeOrder(newOrderFactory);
-					if (order != null) {
+					if (order != null && order.getPrice() != 0) {
 						printDelimiter();
 						System.out.println("Placed order: " + order);
 						printDelimiter();
+					} else {
+						System.out.println("Order can't be empty");
 					}
 					break;
 				case 7:
@@ -213,15 +208,7 @@ public class Main {
 						System.out.println("No orders to prepare. Place an order first");
 						break;
 					}
-					printOrders(ordersToPrepare);
-					while(!scanner.hasNextInt()) {
-						scanner.next();
-					}
-					Order orderToPrepare = service.getOrderById(scanner.nextInt(), ordersToPrepare);		
-					if (orderToPrepare == null) {
-						System.out.println("No order with this id");
-						break;
-					}
+					Order orderToPrepare = pickOrder(scanner, service, ordersToPrepare);
 					service.prepareOrder(orderToPrepare);
 					printDelimiter();
 					System.out.println("Prepared order: " + orderToPrepare);
@@ -234,22 +221,8 @@ public class Main {
 						System.out.println("No orders awaiting pickup. Prepare an order first");
 						break;
 					}
-					printOrders(ordersAwaitingPickup);
-					System.out.println("Enter order number:");
-					while(!scanner.hasNextInt()) {
-						scanner.next();
-					}
-					Order orderToPickup = service.getOrderById(scanner.nextInt(), ordersAwaitingPickup);	
-					List<Driver> freeDrivers = service.getFreeDrivers();
-					if (freeDrivers.isEmpty()) {
-						System.out.println("No free drivers at the moment. Try again later");
-						break;
-					}
-					printDrivers(freeDrivers);
-					while(!scanner.hasNextInt()) {
-						scanner.next();
-					}
-					Driver freeDriver = freeDrivers.get(scanner.nextInt());
+					Order orderToPickup = pickOrder(scanner, service, ordersAwaitingPickup);
+					Driver freeDriver = pickFreeDriver(scanner, service);
 					service.pickupOrder(orderToPickup, freeDriver);
 					printDelimiter();
 					System.out.println("Pickup order: " + orderToPickup);
@@ -258,15 +231,7 @@ public class Main {
 				case 9:
 					// Deliver order
 					List<Order> ordersToDeliver = service.getOrdersByStatus(OrderStatus.DELIVERING);
-					if (ordersToDeliver.isEmpty()) {
-						System.out.println("No orders to deliver. Pickup an order first");
-						break;
-					}
-					printOrders(ordersToDeliver);
-					while(!scanner.hasNextInt()) {
-						scanner.next();
-					}
-					Order orderToDeliver = service.getOrderById(scanner.nextInt(), ordersToDeliver);	
+					Order orderToDeliver = pickOrder(scanner, service, ordersToDeliver);
 					service.deliverOrder(orderToDeliver);
 					printDelimiter();
 					System.out.println("Delivered order: " + orderToDeliver);
@@ -275,16 +240,7 @@ public class Main {
 				case 10:
 					// Get order and tip
 					List<Order> ordersToGet = service.getOrdersByStatus(OrderStatus.ARRIVED);
-					if (ordersToGet.isEmpty()) {
-						System.out.println("No orders to get. Deliver an order first");
-						break;
-					}
-					printOrders(ordersToGet);
-					System.out.println("Enter order number:");
-					while(!scanner.hasNextInt()) {
-						scanner.next();
-					}
-					Order orderToGet = service.getOrderById(scanner.nextInt(), ordersToGet);
+					Order orderToGet = pickOrder(scanner, service, ordersToGet);
 					System.out.println("Enter tip amount:");
 					while(!scanner.hasNextDouble()) {
 						scanner.next();
@@ -321,33 +277,148 @@ public class Main {
 	 */
 	private static Business pickBusiness(Scanner scanner, IActionsService service) {
 		List<Business> businesses = service.getBusinesses();
-		printBusinesses(businesses);
-		System.out.println("Enter the business number");
-		while(!scanner.hasNextInt()) {
-			scanner.next();
+		if (businesses.isEmpty()) {
+			System.out.println("No businesses!");
+			return null;
 		}
-		int userNumber = scanner.nextInt();
-		scanner.nextLine(); // consume \n
+		printBusinesses(businesses);
+		int businessNumber;
+		while(true) {
+			System.out.println("Enter the business number");
+			while(!scanner.hasNextInt()) {
+				scanner.next();
+			}
+			businessNumber = scanner.nextInt();
+			scanner.nextLine(); // consume \n
+			if (businessNumber < 0 || businessNumber >= businesses.size()) {
+				System.out.println("Out of bounds number. Try again");
+				continue;
+			} else {
+				break;
+			}
+		}
 		
-		return businesses.get(userNumber);
+		return businesses.get(businessNumber);
 	}
 
 	/**
 	 * @param scanner
 	 * @param service
+	 * @param business
+	 * @return the picked product
+	 */
+	private static Product pickProductFromBusiness(Scanner scanner, IActionsService service, Business business) {
+		List<Product> products = business.getProducts();
+		if (products.isEmpty()) {
+			System.out.println("No products!");
+			return null;
+		}
+		business.printProducts();
+		int productNumber;
+		while(true) {
+			System.out.println("Enter the product number");
+			while(!scanner.hasNextInt()) {
+				scanner.next();
+			}
+			productNumber = scanner.nextInt();
+			scanner.nextLine(); // consume \n
+			if (productNumber < 0 || productNumber >= products.size()) {
+				System.out.println("Out of bounds number. Try again");
+				continue;
+			} else {
+				break;
+			}
+		}
+		
+		return products.get(productNumber);
+	}
+	
+	/**
+	 * @param scanner
+	 * @param service
+	 * @param orders
+	 * @return the picked order
+	 */
+	private static Order pickOrder(Scanner scanner, IActionsService service, List<Order> orders) {
+		if (orders.isEmpty()) {
+			System.out.println("No orders!");
+			return null;
+		}
+		printOrders(orders);
+		int orderNumber;
+		while(true) {
+			System.out.println("Enter the order number");
+			while(!scanner.hasNextInt()) {
+				scanner.next();
+			}
+			orderNumber = scanner.nextInt();
+			scanner.nextLine(); // consume \n
+			if (orderNumber < 0 || orderNumber >= orders.size()) {
+				System.out.println("Out of bounds number. Try again");
+				continue;
+			} else {
+				break;
+			}
+		}
+		
+		return orders.get(orderNumber);
+	}
+	
+	/**
+	 * @param scanner
+	 * @param service
 	 * @return the picked user
 	 */
-	public static User pickUser(Scanner scanner, IActionsService service) {
+	private static User pickUser(Scanner scanner, IActionsService service) {
 		List<User> users = service.getUsers();
-		printUsers(users);
-		System.out.println("Enter the user number");
-		while(!scanner.hasNextInt()) {
-			scanner.next();
+		if (users.isEmpty()) {
+			System.out.println("No users!");
+			return null;
 		}
-		int userNumber = scanner.nextInt();
-		scanner.nextLine(); // consume \n
+		printUsers(users);
+		int userNumber;
+		while(true) {			
+			System.out.println("Enter the user number");
+			while(!scanner.hasNextInt()) {
+				scanner.next();
+			}
+			userNumber = scanner.nextInt();
+			scanner.nextLine(); // consume \n
+			if (userNumber < 0 || userNumber >= users.size()) {
+				System.out.println("Out of bounds number. Try again");
+				continue;
+			} else {
+				break;
+			}
+		}
 		
 		return users.get(userNumber);
+	}
+	
+	private static Driver pickFreeDriver(Scanner scanner, IActionsService service) {
+		List<Driver> drivers = service.getFreeDrivers();
+		if (drivers.isEmpty()) {
+			System.out.println("No free drivers!");
+			return null;
+		}
+		printDrivers(drivers);
+		int driverNumber;
+		while(true) {			
+			System.out.println("Enter the driver number");
+			while(!scanner.hasNextInt()) {
+				scanner.next();
+			}
+			driverNumber = scanner.nextInt();
+			scanner.nextLine(); // consume \n
+			if (driverNumber < 0 || driverNumber >= drivers.size()) {
+				System.out.println("Out of bounds number. Try again");
+				continue;
+			} else {
+				break;
+			}
+		}
+		
+		return drivers.get(driverNumber);
 	}
 
 }
