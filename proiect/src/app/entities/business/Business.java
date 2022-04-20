@@ -3,6 +3,7 @@ package app.entities.business;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 import app.entities.AccountBalanceHolder;
 import app.entities.Rating;
@@ -12,7 +13,9 @@ import app.entities.order.OrderStatus;
 
 public class Business extends AccountBalanceHolder{
 	
-	private String name;
+	protected final UUID id;
+	
+	protected String name;
 	
 	private Rating rating;
 	
@@ -27,7 +30,17 @@ public class Business extends AccountBalanceHolder{
 	 * @param rating
 	 */
 	public Business(String name, Rating rating) {
+		this(UUID.randomUUID(), name, rating);
+	}
+	
+	/**
+	 * @param id
+	 * @param name
+	 * @param rating
+	 */
+	public Business(UUID id, String name, Rating rating) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.rating = rating;
 		products = new ArrayList<>();
@@ -38,6 +51,7 @@ public class Business extends AccountBalanceHolder{
 	public Business(Scanner scanner) {
 		super();
 		System.out.println("Business name:\n");
+		id = UUID.randomUUID();
 		name = scanner.nextLine();
 		rating = new Rating();
 		products = new ArrayList<>();
@@ -130,7 +144,6 @@ public class Business extends AccountBalanceHolder{
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return String.format("Business: [name: %s]", name) + "\n" + super.toString();
 	}
 
@@ -143,6 +156,25 @@ public class Business extends AccountBalanceHolder{
 			System.out.printf("#%d: %s%n", i, products.get(i));
 		}
 		
+	}
+
+	public String toCSV() {
+		return String.format("%s,OTHER,%s", id.toString(), name);
+	}
+
+	/**
+	 * @return the id
+	 */
+	public UUID getId() {
+		return id;
+	}
+	
+	/**
+	 * @return the products in CSV format
+	 */
+	public String productsToCSV() {
+	    List<String> dataToCSV = products.stream().map(p -> p.toCSV(id)).toList();
+	    return String.join("\n", dataToCSV);
 	}
 
 }

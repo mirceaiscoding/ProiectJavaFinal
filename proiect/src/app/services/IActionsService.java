@@ -13,8 +13,6 @@ import app.entities.user.User;
 public interface IActionsService {
 	
 	List<User> getUsers();	
-
-	List<Business> getBusinesses();
 	
 	List<Driver> getFreeDrivers();
 

@@ -1,6 +1,7 @@
 package app.entities.business;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Product {
 
@@ -59,6 +60,10 @@ public class Product {
 	@Override
 	public String toString() {
 		return String.format("Product: [name: %s], [price: %f]", name, price);
+	}
+
+	public String toCSV(UUID businessId) {
+		return String.format("%s,%s,%f", businessId.toString(), name, price);
 	}
 	
 }

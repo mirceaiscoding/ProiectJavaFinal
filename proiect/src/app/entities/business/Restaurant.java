@@ -3,6 +3,7 @@ package app.entities.business;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import app.entities.Rating;
 
@@ -20,6 +21,11 @@ public class Restaurant extends Business{
 		restaurantTypes = new HashSet<>();
 	}
 	
+	public Restaurant(UUID id, String name, Rating rating) {
+		super(id, name, rating);
+		restaurantTypes = new HashSet<>();
+	}
+
 	/**
 	 * @return the restaurantTypes
 	 */
@@ -43,4 +49,8 @@ public class Restaurant extends Business{
 		return "Restaurant " + super.toString();
 	}
 
+	@Override
+	public String toCSV() {
+		return String.format("%s,RESTAURANT,%s", super.id, super.name);
+	}
 }

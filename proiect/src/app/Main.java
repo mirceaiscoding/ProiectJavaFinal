@@ -1,22 +1,29 @@
 package app;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
-import app.entities.business.Business;
-import app.entities.business.Product;
 import app.entities.business.Restaurant;
+import app.entities.Rating;
+import app.entities.business.Business;
 import app.entities.business.BusinessFactory;
 import app.entities.business.BusinessType;
+import app.entities.business.Product;
 import app.entities.driver.Driver;
 import app.entities.order.Order;
 import app.entities.order.OrderFactory;
 import app.entities.order.OrderItem;
 import app.entities.order.OrderStatus;
-import app.entities.user.*;
+import app.entities.user.City;
+import app.entities.user.Country;
+import app.entities.user.User;
+import app.entities.user.UserAddress;
 import app.services.ActionsService;
+import app.services.BusinessCSVDatabaseService;
+import app.services.CSVBadCollumnLengthException;
 import app.services.IActionsService;
-import app.entities.Rating;
+import app.services.IBusinessDatabaseService;
 
 
 public class Main {
@@ -66,22 +73,37 @@ public class Main {
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		IActionsService service = ActionsService.getInstance();
+		IActionsService actionsService = ActionsService.getInstance();
+		IBusinessDatabaseService businessDatabaseService = BusinessCSVDatabaseService.getInstance();
+		try {
+			businessDatabaseService.loadData();
+			System.out.println("LOADED BUSINESS FROM CSV: " + businessDatabaseService.getBusinesses());
+		} catch (IOException | CSVBadCollumnLengthException e1) {
+			System.out.println("Exception while loading data");
+			e1.printStackTrace();
+		}
 		
 		// Initial data
 		User user1 = new User("Bina Mircea", "bina.mircea@yahoo.com", "0777123123", new UserAddress(Country.ROMANIA , City.CRAIOVA, "str Balcescu", "12"));
-		service.addNewUser(user1);
-		service.addFoundsToUser(user1, 100);
+		actionsService.addNewUser(user1);
+		actionsService.addFoundsToUser(user1, 100);
 		
 		Driver driver1 = new Driver("Popoescu Andrei", "andrei@yahoo.com", "0766666666");
-		service.addNewDriver(driver1);
+		actionsService.addNewDriver(driver1);
 		
-		Business restaurant1 = new Restaurant("Starbucks", new Rating());
-		service.addProductToBusiness(new Product("Espresso", 10), restaurant1);
-		service.addProductToBusiness(new Product("Latte", 13), restaurant1);
-		service.addProductToBusiness(new Product("Frapuccinno", 15), restaurant1);
-		service.addProductToBusiness(new Product("Pancakes", 10), restaurant1);
-		service.addNewBusiness(restaurant1);
+//		Business restaurant1 = new Restaurant("Starbucks", new Rating());
+//		restaurant1.addProduct(new Product("Espresso", 10));
+//		restaurant1.addProduct(new Product("Latte", 13));
+//		restaurant1.addProduct(new Product("Frapuccinno", 15));
+//		restaurant1.addProduct(new Product("Pancakes", 10));
+//		
+//		try {
+//			businessDatabaseService.addBusiness(restaurant1);
+//			businessDatabaseService.saveData();
+//		} catch (IOException e1) {
+//			System.out.println("Error while adding business");
+//			e1.printStackTrace();
+//		}
 		
 		// Actions
 		try {
@@ -98,7 +120,7 @@ public class Main {
 				case 0: {
 					// Add user
 					User user = new User(scanner);
-					service.addNewUser(user);
+					actionsService.addNewUser(user);
 					printDelimiter();
 					System.out.println("Added user:\n" + user);
 					printDelimiter();
@@ -111,16 +133,22 @@ public class Main {
 					System.out.println("Business name:");
 					String name = scanner.nextLine();
 					Business business = BusinessFactory.makeBusiness(BusinessType.valueOf(type), name);
-					service.addNewBusiness(business);
-					printDelimiter();
-					System.out.println("Added business:\n" + business);
-					printDelimiter();
+					try {
+						businessDatabaseService.addBusiness(business);
+						businessDatabaseService.saveData();
+						printDelimiter();
+						System.out.println("Added business:\n" + business);
+						printDelimiter();
+					} catch (IOException e1) {
+						System.out.println("Error while adding business");
+						e1.printStackTrace();
+					}
 					break;
 				}
 				case 2: {
 					// Add driver
 					Driver driver = new Driver(scanner);
-					service.addNewDriver(driver);
+					actionsService.addNewDriver(driver);
 					printDelimiter();
 					System.out.println("Added driver:\n" + driver);
 					printDelimiter();
@@ -128,14 +156,14 @@ public class Main {
 				}
 				case 3:
 					// Get user account balance
-					User user = pickUser(scanner, service);
+					User user = pickUser(scanner, actionsService);
 					printDelimiter();
 					System.out.println("User balance: " + user.getAccountBalance());
 					printDelimiter();
 					break;
 				case 4:
 					// Add founds
-					User userToAddFounds = pickUser(scanner, service);
+					User userToAddFounds = pickUser(scanner, actionsService);
 					printDelimiter();
 					System.out.println("Current user balance: " + userToAddFounds.getAccountBalance());
 					printDelimiter();
@@ -144,25 +172,31 @@ public class Main {
 						scanner.next();
 					}
 					double ammount = scanner.nextDouble();
-					service.addFoundsToUser(userToAddFounds, ammount);
+					actionsService.addFoundsToUser(userToAddFounds, ammount);
 					printDelimiter();
 					System.out.println("New user balance: " + userToAddFounds.getAccountBalance());
 					printDelimiter();
 					break;
 				case 5:
 					// Add product to business
-					Business business = pickBusiness(scanner, service);
+					Business business = pickBusiness(scanner, actionsService, businessDatabaseService);
 					Product product = new Product(scanner);
-					service.addProductToBusiness(product, business);
-					printDelimiter();
-					System.out.println("New business products: " + business.getProducts());
-					printDelimiter();
+					try {
+						businessDatabaseService.addProductToBusiness(business, product);
+						businessDatabaseService.saveData();
+						printDelimiter();
+						System.out.println("New business products: " + business.getProducts());
+						printDelimiter();
+					} catch (IOException e1) {
+						System.out.println("Error while adding product to business");
+						e1.printStackTrace();
+					}
 					break;
 				case 6:
 					// Place order
-					User userThatOrders = pickUser(scanner, service);
-					Business businessToOrderFrom = pickBusiness(scanner, service);
-					OrderFactory newOrderFactory = service.createNewOrderFactory(userThatOrders, businessToOrderFrom);
+					User userThatOrders = pickUser(scanner, actionsService);
+					Business businessToOrderFrom = pickBusiness(scanner, actionsService, businessDatabaseService);
+					OrderFactory newOrderFactory = actionsService.createNewOrderFactory(userThatOrders, businessToOrderFrom);
 					
 					boolean finish = false;
 					while (!finish) {
@@ -170,7 +204,7 @@ public class Main {
 						String response = scanner.nextLine();
 						switch (response) {
 						case "Add":
-							Product productToAdd = pickProductFromBusiness(scanner, service, businessToOrderFrom);
+							Product productToAdd = pickProductFromBusiness(scanner, actionsService, businessToOrderFrom);
 							System.out.println("Quantity:");
 							while(!scanner.hasNextInt()) {
 								scanner.next();
@@ -191,7 +225,7 @@ public class Main {
 							break;
 						}
 					}
-					Order order = service.placeOrder(newOrderFactory);
+					Order order = actionsService.placeOrder(newOrderFactory);
 					if (order != null && order.getPrice() != 0) {
 						printDelimiter();
 						System.out.println("Placed order: " + order);
@@ -203,51 +237,51 @@ public class Main {
 				case 7:
 					// Prepare order
 					System.out.println("Enter order number:");
-					List<Order> ordersToPrepare = service.getOrdersByStatus(OrderStatus.PREPERING);
+					List<Order> ordersToPrepare = actionsService.getOrdersByStatus(OrderStatus.PREPERING);
 					if (ordersToPrepare.isEmpty()) {
 						System.out.println("No orders to prepare. Place an order first");
 						break;
 					}
-					Order orderToPrepare = pickOrder(scanner, service, ordersToPrepare);
-					service.prepareOrder(orderToPrepare);
+					Order orderToPrepare = pickOrder(scanner, actionsService, ordersToPrepare);
+					actionsService.prepareOrder(orderToPrepare);
 					printDelimiter();
 					System.out.println("Prepared order: " + orderToPrepare);
 					printDelimiter();
 					break;
 				case 8:
 					// Find driver to pickup order
-					List<Order> ordersAwaitingPickup = service.getOrdersByStatus(OrderStatus.AWAITING_PICKUP);
+					List<Order> ordersAwaitingPickup = actionsService.getOrdersByStatus(OrderStatus.AWAITING_PICKUP);
 					if (ordersAwaitingPickup.isEmpty()) {
 						System.out.println("No orders awaiting pickup. Prepare an order first");
 						break;
 					}
-					Order orderToPickup = pickOrder(scanner, service, ordersAwaitingPickup);
-					Driver freeDriver = pickFreeDriver(scanner, service);
-					service.pickupOrder(orderToPickup, freeDriver);
+					Order orderToPickup = pickOrder(scanner, actionsService, ordersAwaitingPickup);
+					Driver freeDriver = pickFreeDriver(scanner, actionsService);
+					actionsService.pickupOrder(orderToPickup, freeDriver);
 					printDelimiter();
 					System.out.println("Pickup order: " + orderToPickup);
 					printDelimiter();
 					break;
 				case 9:
 					// Deliver order
-					List<Order> ordersToDeliver = service.getOrdersByStatus(OrderStatus.DELIVERING);
-					Order orderToDeliver = pickOrder(scanner, service, ordersToDeliver);
-					service.deliverOrder(orderToDeliver);
+					List<Order> ordersToDeliver = actionsService.getOrdersByStatus(OrderStatus.DELIVERING);
+					Order orderToDeliver = pickOrder(scanner, actionsService, ordersToDeliver);
+					actionsService.deliverOrder(orderToDeliver);
 					printDelimiter();
 					System.out.println("Delivered order: " + orderToDeliver);
 					printDelimiter();
 					break;
 				case 10:
 					// Get order and tip
-					List<Order> ordersToGet = service.getOrdersByStatus(OrderStatus.ARRIVED);
-					Order orderToGet = pickOrder(scanner, service, ordersToGet);
+					List<Order> ordersToGet = actionsService.getOrdersByStatus(OrderStatus.ARRIVED);
+					Order orderToGet = pickOrder(scanner, actionsService, ordersToGet);
 					System.out.println("Enter tip amount:");
 					while(!scanner.hasNextDouble()) {
 						scanner.next();
 					}
 					double tip = scanner.nextDouble();
 					try {
-						service.getOrderAndTip(orderToGet, tip);
+						actionsService.getOrderAndTip(orderToGet, tip);
 						printDelimiter();
 						System.out.println("Completed order: " + orderToGet);
 						printDelimiter();
@@ -275,8 +309,8 @@ public class Main {
 	 * @param service
 	 * @return the picked business
 	 */
-	private static Business pickBusiness(Scanner scanner, IActionsService service) {
-		List<Business> businesses = service.getBusinesses();
+	private static Business pickBusiness(Scanner scanner, IActionsService service, IBusinessDatabaseService businessDatabaseService) {
+		List<Business> businesses = businessDatabaseService.getBusinesses();
 		if (businesses.isEmpty()) {
 			System.out.println("No businesses!");
 			return null;
