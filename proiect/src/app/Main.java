@@ -22,8 +22,12 @@ import app.entities.user.UserAddress;
 import app.services.ActionsService;
 import app.services.BusinessCSVDatabaseService;
 import app.services.CSVBadCollumnLengthException;
+import app.services.DriverCSVDatabaseService;
 import app.services.IActionsService;
 import app.services.IBusinessDatabaseService;
+import app.services.IDriverDatabaseService;
+import app.services.IUserDatabaseService;
+import app.services.UserCSVDatabaseService;
 
 
 public class Main {
@@ -75,21 +79,30 @@ public class Main {
 		Scanner scanner = new Scanner(System.in);
 		IActionsService actionsService = ActionsService.getInstance();
 		IBusinessDatabaseService businessDatabaseService = BusinessCSVDatabaseService.getInstance();
+		IUserDatabaseService userDatabaseService = UserCSVDatabaseService.getInstance();
+		IDriverDatabaseService driverDatabaseService = DriverCSVDatabaseService.getInstance();
 		try {
 			businessDatabaseService.loadData();
 			System.out.println("LOADED BUSINESS FROM CSV: " + businessDatabaseService.getBusinesses());
+			
+			userDatabaseService.loadData();
+			System.out.println("LOADED USERS FROM CSV: " + userDatabaseService.getUsers());
+			
+			driverDatabaseService.loadData();
+			System.out.println("LOADED DRIVERS FROM CSV: " + driverDatabaseService.getDrivers());
+
 		} catch (IOException | CSVBadCollumnLengthException e1) {
 			System.out.println("Exception while loading data");
 			e1.printStackTrace();
 		}
 		
 		// Initial data
-		User user1 = new User("Bina Mircea", "bina.mircea@yahoo.com", "0777123123", new UserAddress(Country.ROMANIA , City.CRAIOVA, "str Balcescu", "12"));
-		actionsService.addNewUser(user1);
-		actionsService.addFoundsToUser(user1, 100);
+//		User user1 = new User("Bina Mircea", "bina.mircea@yahoo.com", "0777123123", new UserAddress(Country.ROMANIA , City.CRAIOVA, "str Balcescu", "12"));
+//		actionsService.addNewUser(user1);
+//		actionsService.addFoundsToUser(user1, 100);
 		
-		Driver driver1 = new Driver("Popoescu Andrei", "andrei@yahoo.com", "0766666666");
-		actionsService.addNewDriver(driver1);
+//		Driver driver1 = new Driver("Popoescu Andrei", "andrei@yahoo.com", "0766666666");
+//		actionsService.addNewDriver(driver1);
 		
 //		Business restaurant1 = new Restaurant("Starbucks", new Rating());
 //		restaurant1.addProduct(new Product("Espresso", 10));
@@ -120,10 +133,16 @@ public class Main {
 				case 0: {
 					// Add user
 					User user = new User(scanner);
-					actionsService.addNewUser(user);
-					printDelimiter();
-					System.out.println("Added user:\n" + user);
-					printDelimiter();
+					try {
+						userDatabaseService.addUser(user);
+						userDatabaseService.saveData();
+						printDelimiter();
+						System.out.println("Added user:\n" + user);
+						printDelimiter();
+					} catch (IOException e) {
+						System.out.println("Error while adding user");
+						e.printStackTrace();
+					}
 					break;
 				}
 				case 1: {
@@ -148,22 +167,28 @@ public class Main {
 				case 2: {
 					// Add driver
 					Driver driver = new Driver(scanner);
-					actionsService.addNewDriver(driver);
-					printDelimiter();
-					System.out.println("Added driver:\n" + driver);
-					printDelimiter();
+					try {
+						driverDatabaseService.addDriver(driver);
+						driverDatabaseService.saveData();
+						printDelimiter();
+						System.out.println("Added driver:\n" + driver);
+						printDelimiter();
+					} catch (IOException e) {
+						System.out.println("Error while adding driver");
+						e.printStackTrace();
+					}
 					break;
 				}
 				case 3:
 					// Get user account balance
-					User user = pickUser(scanner, actionsService);
+					User user = pickUser(scanner, userDatabaseService);
 					printDelimiter();
 					System.out.println("User balance: " + user.getAccountBalance());
 					printDelimiter();
 					break;
 				case 4:
 					// Add founds
-					User userToAddFounds = pickUser(scanner, actionsService);
+					User userToAddFounds = pickUser(scanner, userDatabaseService);
 					printDelimiter();
 					System.out.println("Current user balance: " + userToAddFounds.getAccountBalance());
 					printDelimiter();
@@ -192,103 +217,103 @@ public class Main {
 						e1.printStackTrace();
 					}
 					break;
-				case 6:
-					// Place order
-					User userThatOrders = pickUser(scanner, actionsService);
-					Business businessToOrderFrom = pickBusiness(scanner, actionsService, businessDatabaseService);
-					OrderFactory newOrderFactory = actionsService.createNewOrderFactory(userThatOrders, businessToOrderFrom);
-					
-					boolean finish = false;
-					while (!finish) {
-						System.out.println("Order maker options: [Add], [Finish]");
-						String response = scanner.nextLine();
-						switch (response) {
-						case "Add":
-							Product productToAdd = pickProductFromBusiness(scanner, actionsService, businessToOrderFrom);
-							System.out.println("Quantity:");
-							while(!scanner.hasNextInt()) {
-								scanner.next();
-							}
-							int quantity = scanner.nextInt();
-							scanner.nextLine();
-							newOrderFactory.addOrderItem(new OrderItem(productToAdd, quantity));
-							break;
-						case "Finish":
-							if (newOrderFactory.getOrderItems().isEmpty()) {
-								System.out.println("Can't place an empty order");
-							} else {
-								finish = true;
-							}
-							break;
-						default:
-							System.out.println("No action selected");
-							break;
-						}
-					}
-					Order order = actionsService.placeOrder(newOrderFactory);
-					if (order != null && order.getPrice() != 0) {
-						printDelimiter();
-						System.out.println("Placed order: " + order);
-						printDelimiter();
-					} else {
-						System.out.println("Order can't be empty");
-					}
-					break;
-				case 7:
-					// Prepare order
-					System.out.println("Enter order number:");
-					List<Order> ordersToPrepare = actionsService.getOrdersByStatus(OrderStatus.PREPERING);
-					if (ordersToPrepare.isEmpty()) {
-						System.out.println("No orders to prepare. Place an order first");
-						break;
-					}
-					Order orderToPrepare = pickOrder(scanner, actionsService, ordersToPrepare);
-					actionsService.prepareOrder(orderToPrepare);
-					printDelimiter();
-					System.out.println("Prepared order: " + orderToPrepare);
-					printDelimiter();
-					break;
-				case 8:
-					// Find driver to pickup order
-					List<Order> ordersAwaitingPickup = actionsService.getOrdersByStatus(OrderStatus.AWAITING_PICKUP);
-					if (ordersAwaitingPickup.isEmpty()) {
-						System.out.println("No orders awaiting pickup. Prepare an order first");
-						break;
-					}
-					Order orderToPickup = pickOrder(scanner, actionsService, ordersAwaitingPickup);
-					Driver freeDriver = pickFreeDriver(scanner, actionsService);
-					actionsService.pickupOrder(orderToPickup, freeDriver);
-					printDelimiter();
-					System.out.println("Pickup order: " + orderToPickup);
-					printDelimiter();
-					break;
-				case 9:
-					// Deliver order
-					List<Order> ordersToDeliver = actionsService.getOrdersByStatus(OrderStatus.DELIVERING);
-					Order orderToDeliver = pickOrder(scanner, actionsService, ordersToDeliver);
-					actionsService.deliverOrder(orderToDeliver);
-					printDelimiter();
-					System.out.println("Delivered order: " + orderToDeliver);
-					printDelimiter();
-					break;
-				case 10:
-					// Get order and tip
-					List<Order> ordersToGet = actionsService.getOrdersByStatus(OrderStatus.ARRIVED);
-					Order orderToGet = pickOrder(scanner, actionsService, ordersToGet);
-					System.out.println("Enter tip amount:");
-					while(!scanner.hasNextDouble()) {
-						scanner.next();
-					}
-					double tip = scanner.nextDouble();
-					try {
-						actionsService.getOrderAndTip(orderToGet, tip);
-						printDelimiter();
-						System.out.println("Completed order: " + orderToGet);
-						printDelimiter();
-					} catch (Exception e) {
-						System.out.println("Couldn't complete order");
-					}
-					break;
+//				case 6:
+//					// Place order
+//					User userThatOrders = pickUser(scanner, userDatabaseService);
+//					Business businessToOrderFrom = pickBusiness(scanner, actionsService, businessDatabaseService);
+//					OrderFactory newOrderFactory = actionsService.createNewOrderFactory(userThatOrders, businessToOrderFrom);
+//					
+//					boolean finish = false;
+//					while (!finish) {
+//						System.out.println("Order maker options: [Add], [Finish]");
+//						String response = scanner.nextLine();
+//						switch (response) {
+//						case "Add":
+//							Product productToAdd = pickProductFromBusiness(scanner, actionsService, businessToOrderFrom);
+//							System.out.println("Quantity:");
+//							while(!scanner.hasNextInt()) {
+//								scanner.next();
+//							}
+//							int quantity = scanner.nextInt();
+//							scanner.nextLine();
+//							newOrderFactory.addOrderItem(new OrderItem(productToAdd, quantity));
+//							break;
+//						case "Finish":
+//							if (newOrderFactory.getOrderItems().isEmpty()) {
+//								System.out.println("Can't place an empty order");
+//							} else {
+//								finish = true;
+//							}
+//							break;
+//						default:
+//							System.out.println("No action selected");
+//							break;
+//						}
+//					}
+//					Order order = actionsService.placeOrder(newOrderFactory);
+//					if (order != null && order.getPrice() != 0) {
+//						printDelimiter();
+//						System.out.println("Placed order: " + order);
+//						printDelimiter();
+//					} else {
+//						System.out.println("Order can't be empty");
+//					}
+//					break;
+//				case 7:
+//					// Prepare order
+//					System.out.println("Enter order number:");
+//					List<Order> ordersToPrepare = actionsService.getOrdersByStatus(OrderStatus.PREPERING);
+//					if (ordersToPrepare.isEmpty()) {
+//						System.out.println("No orders to prepare. Place an order first");
+//						break;
+//					}
+//					Order orderToPrepare = pickOrder(scanner, actionsService, ordersToPrepare);
+//					actionsService.prepareOrder(orderToPrepare);
+//					printDelimiter();
+//					System.out.println("Prepared order: " + orderToPrepare);
+//					printDelimiter();
+//					break;
+//				case 8:
+//					// Find driver to pickup order
+//					List<Order> ordersAwaitingPickup = actionsService.getOrdersByStatus(OrderStatus.AWAITING_PICKUP);
+//					if (ordersAwaitingPickup.isEmpty()) {
+//						System.out.println("No orders awaiting pickup. Prepare an order first");
+//						break;
+//					}
+//					Order orderToPickup = pickOrder(scanner, actionsService, ordersAwaitingPickup);
+//					Driver freeDriver = pickFreeDriver(scanner, actionsService);
+//					actionsService.pickupOrder(orderToPickup, freeDriver);
+//					printDelimiter();
+//					System.out.println("Pickup order: " + orderToPickup);
+//					printDelimiter();
+//					break;
+//				case 9:
+//					// Deliver order
+//					List<Order> ordersToDeliver = actionsService.getOrdersByStatus(OrderStatus.DELIVERING);
+//					Order orderToDeliver = pickOrder(scanner, actionsService, ordersToDeliver);
+//					actionsService.deliverOrder(orderToDeliver);
+//					printDelimiter();
+//					System.out.println("Delivered order: " + orderToDeliver);
+//					printDelimiter();
+//					break;
+//				case 10:
+//					// Get order and tip
+//					List<Order> ordersToGet = actionsService.getOrdersByStatus(OrderStatus.ARRIVED);
+//					Order orderToGet = pickOrder(scanner, actionsService, ordersToGet);
+//					System.out.println("Enter tip amount:");
+//					while(!scanner.hasNextDouble()) {
+//						scanner.next();
+//					}
+//					double tip = scanner.nextDouble();
+//					try {
+//						actionsService.getOrderAndTip(orderToGet, tip);
+//						printDelimiter();
+//						System.out.println("Completed order: " + orderToGet);
+//						printDelimiter();
+//					} catch (Exception e) {
+//						System.out.println("Couldn't complete order");
+//					}
+//					break;
 				case 11:
 					// Exit
 					System.out.println("Exit app");
@@ -403,8 +428,8 @@ public class Main {
 	 * @param service
 	 * @return the picked user
 	 */
-	private static User pickUser(Scanner scanner, IActionsService service) {
-		List<User> users = service.getUsers();
+	private static User pickUser(Scanner scanner, IUserDatabaseService userDatabaseService) {
+		List<User> users = userDatabaseService.getUsers();
 		if (users.isEmpty()) {
 			System.out.println("No users!");
 			return null;
@@ -429,8 +454,8 @@ public class Main {
 		return users.get(userNumber);
 	}
 	
-	private static Driver pickFreeDriver(Scanner scanner, IActionsService service) {
-		List<Driver> drivers = service.getFreeDrivers();
+	private static Driver pickFreeDriver(Scanner scanner, IDriverDatabaseService driverDatabaseService) {
+		List<Driver> drivers = driverDatabaseService.getFreeDrivers();
 		if (drivers.isEmpty()) {
 			System.out.println("No free drivers!");
 			return null;

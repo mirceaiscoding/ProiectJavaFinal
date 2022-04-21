@@ -173,5 +173,12 @@ public class Order implements Comparable<Order> {
 	public String toString() {
 		return String.format("Order #%d: [business: %s], [user: %s], [price: %f], [status: %s]", id, business.getName(), client.getName(), getPrice(), status.name());
 	}
+	
+//	int id, User client, Business business, Driver driver, LocalDateTime timePlacedOrder, OrderStatus status,
+//	OrderData data
+
+//	public String toCSV() {
+//		return String.format("%d,", null)
+//	}
 
 }

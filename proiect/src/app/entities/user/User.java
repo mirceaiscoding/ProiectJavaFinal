@@ -2,6 +2,7 @@ package app.entities.user;
 
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import app.entities.AccountBalanceHolder;
 import app.entities.Person;
@@ -12,8 +13,23 @@ public class User extends Person {
 
 	private UserAddress address;
 	
+	private final UUID id;
+	
+	public User(String name, String email, String phoneNumber, UserAddress adress, UUID id) {
+		super(name, email, phoneNumber);
+		this.id = id;
+		this.address = adress;
+	}
+	
+	/**
+	 * @param name
+	 * @param email
+	 * @param phoneNumber
+	 * @param adress
+	 */
 	public User(String name, String email, String phoneNumber, UserAddress adress) {
 		super(name, email, phoneNumber);
+		this.id = UUID.randomUUID();
 		this.address = adress;
 	}
 	
@@ -24,6 +40,7 @@ public class User extends Person {
 	 */
 	public User(Scanner scanner) {
 		super(scanner);
+		this.id = UUID.randomUUID();
 		address = new UserAddress(scanner);
 	}
 
@@ -90,5 +107,24 @@ public class User extends Person {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return super.toString() + "\n" + address;
+	}
+	
+	public String toCSV() {
+		return String.format("%s,%s,%s,%s,%s,%s,%s,%s", 
+				id.toString(),
+				super.name, 
+				super.email, 
+				super.phoneNumber,
+				address.getCountry().toString(),
+				address.getCity().toString(),
+				address.getAdressLine1(),
+				address.getAdressLine2());
+	}
+
+	/**
+	 * @return the id
+	 */
+	public UUID getId() {
+		return id;
 	}
 }
