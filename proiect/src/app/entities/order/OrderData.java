@@ -2,6 +2,7 @@ package app.entities.order;
 
 
 import java.util.List;
+import java.util.UUID;
 
 public class OrderData {
 
@@ -38,6 +39,17 @@ public class OrderData {
 			price += item.getPrice();
 		}
 		return price;
+	}
+	
+	public String toCSV(UUID orderId) {
+		return String.join(",", orderItems.stream().map(o -> o.toCSV(orderId)).toList());
+	}
+
+	/**
+	 * @param item the item to add
+	 */
+	public void addItem(OrderItem item) {
+		orderItems.add(item);
 	}
 
 }

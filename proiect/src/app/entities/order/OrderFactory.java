@@ -4,6 +4,7 @@ package app.entities.order;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import app.entities.AccountBalanceHolder;
 import app.entities.business.Business;
@@ -11,8 +12,6 @@ import app.entities.user.User;
 
 
 public class OrderFactory {
-
-	private static int currentId = 0;
 	
 	private User client;
 	
@@ -57,7 +56,7 @@ public class OrderFactory {
 			double ammount = orderData.getPrice();
 			System.out.println("Transfering money from client to business. Ammount: " + ammount);
 			AccountBalanceHolder.exchangeMoney(client, business, ammount);
-			Order order = new Order(currentId++, client, business, null, LocalDateTime.now(), OrderStatus.SENT, orderData);
+			Order order = new Order(UUID.randomUUID(), client, business, null, LocalDateTime.now(), OrderStatus.SENT, orderData);
 			client.addOrder(order);
 			business.addOrder(order);
 			return order;

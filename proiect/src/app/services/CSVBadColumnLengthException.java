@@ -3,7 +3,7 @@
  */
 package app.services;
 
-public class CSVBadCollumnLengthException extends Exception {
+public class CSVBadColumnLengthException extends Exception {
 
 	/**
 	 * Generated UID
@@ -13,7 +13,7 @@ public class CSVBadCollumnLengthException extends Exception {
 	/**
 	 * @param message
 	 */
-	public CSVBadCollumnLengthException(String message) {
+	public CSVBadColumnLengthException(String message) {
 		super(message);
 	}
 

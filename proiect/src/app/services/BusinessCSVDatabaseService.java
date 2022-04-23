@@ -54,13 +54,13 @@ public class BusinessCSVDatabaseService implements IBusinessDatabaseService{
     }
     
     @Override
-    public void loadData() throws IOException, CSVBadCollumnLengthException {
+    public void loadData() throws IOException, CSVBadColumnLengthException {
     	try (BufferedReader reader = Files.newBufferedReader(PATH_TO_CSV)) {
     	    String line;
     	    while ((line = reader.readLine()) != null) {
     	        String[] values = line.split(COMMA_DELIMITER);
     	        if (values.length != COLLUMS_NUMBER) {
-    	        	throw new CSVBadCollumnLengthException(String.format("Expected %d collumns, but %d were found", COLLUMS_NUMBER, values.length));
+    	        	throw new CSVBadColumnLengthException(String.format("Expected %d collumns, but %d were found", COLLUMS_NUMBER, values.length));
     	        }
     	        UUID id = UUID.fromString(values[0]);
     	        BusinessType type = BusinessType.valueOf(values[1]);
@@ -73,7 +73,7 @@ public class BusinessCSVDatabaseService implements IBusinessDatabaseService{
     	    while ((line = reader.readLine()) != null) {
     	        String[] values = line.split(COMMA_DELIMITER);
     	        if (values.length != PRODUCTS_COLLUMS_NUMBER) {
-    	        	throw new CSVBadCollumnLengthException(String.format("Expected %d collumns, but %d were found", COLLUMS_NUMBER, values.length));
+    	        	throw new CSVBadColumnLengthException(String.format("Expected %d collumns, but %d were found", COLLUMS_NUMBER, values.length));
     	        }
     	        UUID id = UUID.fromString(values[0]);
     	        String name = values[1];
@@ -115,6 +115,16 @@ public class BusinessCSVDatabaseService implements IBusinessDatabaseService{
 	@Override
 	public void addProductToBusiness(Business business, Product product) {
 		business.addProduct(product);
+	}
+
+	@Override
+	public Business getBusinessById(UUID id) {
+		try {			
+			Business business = (Business) businesses.stream().filter(b -> b.getId().equals(id)).toArray()[0];
+			return business;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 	
 }

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
-import app.entities.business.Restaurant;
-import app.entities.Rating;
 import app.entities.business.Business;
 import app.entities.business.BusinessFactory;
 import app.entities.business.BusinessType;
@@ -15,18 +13,17 @@ import app.entities.order.Order;
 import app.entities.order.OrderFactory;
 import app.entities.order.OrderItem;
 import app.entities.order.OrderStatus;
-import app.entities.user.City;
-import app.entities.user.Country;
 import app.entities.user.User;
-import app.entities.user.UserAddress;
 import app.services.ActionsService;
 import app.services.BusinessCSVDatabaseService;
-import app.services.CSVBadCollumnLengthException;
+import app.services.CSVBadColumnLengthException;
 import app.services.DriverCSVDatabaseService;
 import app.services.IActionsService;
 import app.services.IBusinessDatabaseService;
 import app.services.IDriverDatabaseService;
+import app.services.IOrdersDatabaseService;
 import app.services.IUserDatabaseService;
+import app.services.OrdersCSVDatabaseService;
 import app.services.UserCSVDatabaseService;
 
 
@@ -58,7 +55,7 @@ public class Main {
 
 	private static void printOrders(List<Order> orders) {
 		for (int i = 0; i < orders.size(); i++) {
-			System.out.println(orders.get(i));
+			System.out.printf("#%d: %s%n", i, orders.get(i).toString());
 		}
 	}
 	
@@ -81,6 +78,7 @@ public class Main {
 		IBusinessDatabaseService businessDatabaseService = BusinessCSVDatabaseService.getInstance();
 		IUserDatabaseService userDatabaseService = UserCSVDatabaseService.getInstance();
 		IDriverDatabaseService driverDatabaseService = DriverCSVDatabaseService.getInstance();
+		IOrdersDatabaseService ordersDatabaseService = OrdersCSVDatabaseService.getInstance();
 		try {
 			businessDatabaseService.loadData();
 			System.out.println("LOADED BUSINESS FROM CSV: " + businessDatabaseService.getBusinesses());
@@ -90,33 +88,14 @@ public class Main {
 			
 			driverDatabaseService.loadData();
 			System.out.println("LOADED DRIVERS FROM CSV: " + driverDatabaseService.getDrivers());
+			
+			ordersDatabaseService.loadData();
+			System.out.println("LOADED ORDERS FROM CSV: " + ordersDatabaseService.getOrders());
 
-		} catch (IOException | CSVBadCollumnLengthException e1) {
+		} catch (IOException | CSVBadColumnLengthException e1) {
 			System.out.println("Exception while loading data");
 			e1.printStackTrace();
 		}
-		
-		// Initial data
-//		User user1 = new User("Bina Mircea", "bina.mircea@yahoo.com", "0777123123", new UserAddress(Country.ROMANIA , City.CRAIOVA, "str Balcescu", "12"));
-//		actionsService.addNewUser(user1);
-//		actionsService.addFoundsToUser(user1, 100);
-		
-//		Driver driver1 = new Driver("Popoescu Andrei", "andrei@yahoo.com", "0766666666");
-//		actionsService.addNewDriver(driver1);
-		
-//		Business restaurant1 = new Restaurant("Starbucks", new Rating());
-//		restaurant1.addProduct(new Product("Espresso", 10));
-//		restaurant1.addProduct(new Product("Latte", 13));
-//		restaurant1.addProduct(new Product("Frapuccinno", 15));
-//		restaurant1.addProduct(new Product("Pancakes", 10));
-//		
-//		try {
-//			businessDatabaseService.addBusiness(restaurant1);
-//			businessDatabaseService.saveData();
-//		} catch (IOException e1) {
-//			System.out.println("Error while adding business");
-//			e1.printStackTrace();
-//		}
 		
 		// Actions
 		try {
@@ -217,103 +196,124 @@ public class Main {
 						e1.printStackTrace();
 					}
 					break;
-//				case 6:
-//					// Place order
-//					User userThatOrders = pickUser(scanner, userDatabaseService);
-//					Business businessToOrderFrom = pickBusiness(scanner, actionsService, businessDatabaseService);
-//					OrderFactory newOrderFactory = actionsService.createNewOrderFactory(userThatOrders, businessToOrderFrom);
-//					
-//					boolean finish = false;
-//					while (!finish) {
-//						System.out.println("Order maker options: [Add], [Finish]");
-//						String response = scanner.nextLine();
-//						switch (response) {
-//						case "Add":
-//							Product productToAdd = pickProductFromBusiness(scanner, actionsService, businessToOrderFrom);
-//							System.out.println("Quantity:");
-//							while(!scanner.hasNextInt()) {
-//								scanner.next();
-//							}
-//							int quantity = scanner.nextInt();
-//							scanner.nextLine();
-//							newOrderFactory.addOrderItem(new OrderItem(productToAdd, quantity));
-//							break;
-//						case "Finish":
-//							if (newOrderFactory.getOrderItems().isEmpty()) {
-//								System.out.println("Can't place an empty order");
-//							} else {
-//								finish = true;
-//							}
-//							break;
-//						default:
-//							System.out.println("No action selected");
-//							break;
-//						}
-//					}
-//					Order order = actionsService.placeOrder(newOrderFactory);
-//					if (order != null && order.getPrice() != 0) {
-//						printDelimiter();
-//						System.out.println("Placed order: " + order);
-//						printDelimiter();
-//					} else {
-//						System.out.println("Order can't be empty");
-//					}
-//					break;
-//				case 7:
-//					// Prepare order
-//					System.out.println("Enter order number:");
-//					List<Order> ordersToPrepare = actionsService.getOrdersByStatus(OrderStatus.PREPERING);
-//					if (ordersToPrepare.isEmpty()) {
-//						System.out.println("No orders to prepare. Place an order first");
-//						break;
-//					}
-//					Order orderToPrepare = pickOrder(scanner, actionsService, ordersToPrepare);
-//					actionsService.prepareOrder(orderToPrepare);
-//					printDelimiter();
-//					System.out.println("Prepared order: " + orderToPrepare);
-//					printDelimiter();
-//					break;
-//				case 8:
-//					// Find driver to pickup order
-//					List<Order> ordersAwaitingPickup = actionsService.getOrdersByStatus(OrderStatus.AWAITING_PICKUP);
-//					if (ordersAwaitingPickup.isEmpty()) {
-//						System.out.println("No orders awaiting pickup. Prepare an order first");
-//						break;
-//					}
-//					Order orderToPickup = pickOrder(scanner, actionsService, ordersAwaitingPickup);
-//					Driver freeDriver = pickFreeDriver(scanner, actionsService);
-//					actionsService.pickupOrder(orderToPickup, freeDriver);
-//					printDelimiter();
-//					System.out.println("Pickup order: " + orderToPickup);
-//					printDelimiter();
-//					break;
-//				case 9:
-//					// Deliver order
-//					List<Order> ordersToDeliver = actionsService.getOrdersByStatus(OrderStatus.DELIVERING);
-//					Order orderToDeliver = pickOrder(scanner, actionsService, ordersToDeliver);
-//					actionsService.deliverOrder(orderToDeliver);
-//					printDelimiter();
-//					System.out.println("Delivered order: " + orderToDeliver);
-//					printDelimiter();
-//					break;
-//				case 10:
-//					// Get order and tip
-//					List<Order> ordersToGet = actionsService.getOrdersByStatus(OrderStatus.ARRIVED);
-//					Order orderToGet = pickOrder(scanner, actionsService, ordersToGet);
-//					System.out.println("Enter tip amount:");
-//					while(!scanner.hasNextDouble()) {
-//						scanner.next();
-//					}
-//					double tip = scanner.nextDouble();
-//					try {
-//						actionsService.getOrderAndTip(orderToGet, tip);
-//						printDelimiter();
-//						System.out.println("Completed order: " + orderToGet);
-//						printDelimiter();
-//					} catch (Exception e) {
-//						System.out.println("Couldn't complete order");
-//					}
-//					break;
+				case 6:
+					// Place order
+					User userThatOrders = pickUser(scanner, userDatabaseService);
+					Business businessToOrderFrom = pickBusiness(scanner, actionsService, businessDatabaseService);
+					OrderFactory newOrderFactory = ordersDatabaseService.createNewOrderFactory(userThatOrders, businessToOrderFrom);
+					
+					boolean finish = false;
+					while (!finish) {
+						System.out.println("Order maker options: [Add], [Finish]");
+						String response = scanner.nextLine();
+						switch (response) {
+						case "Add":
+							Product productToAdd = pickProductFromBusiness(scanner, actionsService, businessToOrderFrom);
+							System.out.println("Quantity:");
+							while(!scanner.hasNextInt()) {
+								scanner.next();
+							}
+							int quantity = scanner.nextInt();
+							scanner.nextLine();
+							newOrderFactory.addOrderItem(new OrderItem(productToAdd, quantity));
+							break;
+						case "Finish":
+							if (newOrderFactory.getOrderItems().isEmpty()) {
+								System.out.println("Can't place an empty order");
+							} else {
+								finish = true;
+							}
+							break;
+						default:
+							System.out.println("No action selected");
+							break;
+						}
+					}
+					try {
+						Order order = ordersDatabaseService.placeOrder(newOrderFactory);
+						if (order != null && order.getPrice() != 0) {
+							ordersDatabaseService.saveData();
+							printDelimiter();
+							System.out.println("Placed order: " + order);
+							printDelimiter();
+						} else {
+							System.out.println("Order can't be empty");
+						}
+					} catch (IOException e) {
+						System.out.println("Error placing the order");
+					}
+					break;
+				case 7:
+					// Prepare order
+					System.out.println("Enter order number:");
+					List<Order> ordersToPrepare = ordersDatabaseService.getOrdersByStatus(OrderStatus.PREPERING);
+					if (ordersToPrepare.isEmpty()) {
+						System.out.println("No orders to prepare. Place an order first");
+						break;
+					}
+					Order orderToPrepare = pickOrder(scanner, ordersToPrepare);
+					try {
+						ordersDatabaseService.prepareOrder(orderToPrepare);
+						ordersDatabaseService.saveData();
+						printDelimiter();
+						System.out.println("Prepared order: " + orderToPrepare);
+						printDelimiter();
+					} catch (IOException e) {
+						System.out.println("Error preparing order");
+					}
+					break;
+				case 8:
+					// Find driver to pickup order
+					List<Order> ordersAwaitingPickup = ordersDatabaseService.getOrdersByStatus(OrderStatus.AWAITING_PICKUP);
+					if (ordersAwaitingPickup.isEmpty()) {
+						System.out.println("No orders awaiting pickup. Prepare an order first");
+						break;
+					}
+					Order orderToPickup = pickOrder(scanner, ordersAwaitingPickup);
+					Driver freeDriver = pickFreeDriver(scanner, driverDatabaseService);
+					try {
+						ordersDatabaseService.pickupOrder(orderToPickup, freeDriver);
+						ordersDatabaseService.saveData();
+						printDelimiter();
+						System.out.println("Pickup order: " + orderToPickup);
+						printDelimiter();
+					} catch (IOException e) {
+						System.out.println("Error picking up order");
+					}
+					break;
+				case 9:
+					// Deliver order
+					List<Order> ordersToDeliver = ordersDatabaseService.getOrdersByStatus(OrderStatus.DELIVERING);
+					Order orderToDeliver = pickOrder(scanner, ordersToDeliver);
+					try {
+						ordersDatabaseService.deliverOrder(orderToDeliver);
+						ordersDatabaseService.saveData();
+						printDelimiter();
+						System.out.println("Delivered order: " + orderToDeliver);
+						printDelimiter();
+					} catch (IOException e) {
+						System.out.println("Error delivering order");
+					}
+					break;
+				case 10:
+					// Get order and tip
+					List<Order> ordersToGet = ordersDatabaseService.getOrdersByStatus(OrderStatus.ARRIVED);
+					Order orderToGet = pickOrder(scanner, ordersToGet);
+					System.out.println("Enter tip amount:");
+					while(!scanner.hasNextDouble()) {
+						scanner.next();
+					}
+					double tip = scanner.nextDouble();
+					try {
+						ordersDatabaseService.getOrderAndTip(orderToGet, tip);
+						ordersDatabaseService.saveData();
+						printDelimiter();
+						System.out.println("Completed order: " + orderToGet);
+						printDelimiter();
+					} catch (Exception e) {
+						System.out.println("Couldn't complete order");
+					}
+					break;
 				case 11:
 					// Exit
 					System.out.println("Exit app");
@@ -394,11 +394,10 @@ public class Main {
 	
 	/**
 	 * @param scanner
-	 * @param service
 	 * @param orders
 	 * @return the picked order
 	 */
-	private static Order pickOrder(Scanner scanner, IActionsService service, List<Order> orders) {
+	private static Order pickOrder(Scanner scanner, List<Order> orders) {
 		if (orders.isEmpty()) {
 			System.out.println("No orders!");
 			return null;

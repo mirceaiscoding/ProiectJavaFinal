@@ -50,13 +50,13 @@ public class UserCSVDatabaseService implements IUserDatabaseService {
     }
     
     @Override
-    public void loadData() throws IOException, CSVBadCollumnLengthException {
+    public void loadData() throws IOException, CSVBadColumnLengthException {
     	try (BufferedReader reader = Files.newBufferedReader(PATH_TO_CSV)) {
     	    String line;
     	    while ((line = reader.readLine()) != null) {
     	        String[] values = line.split(COMMA_DELIMITER);
     	        if (values.length != COLLUMS_NUMBER) {
-    	        	throw new CSVBadCollumnLengthException(String.format("Expected %d collumns, but %d were found", COLLUMS_NUMBER, values.length));
+    	        	throw new CSVBadColumnLengthException(String.format("Expected %d collumns, but %d were found", COLLUMS_NUMBER, values.length));
     	        }
     	        UUID id = UUID.fromString(values[0]);
     	        String name = values[1];
@@ -93,6 +93,16 @@ public class UserCSVDatabaseService implements IUserDatabaseService {
 	@Override
 	public void addUser(User user) {
 		users.add(user);
+	}
+
+	@Override
+	public User getUserById(UUID id) {
+		try {			
+			User user = (User) users.stream().filter(u -> u.getId().equals(id)).toArray()[0];
+			return user;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 
 }

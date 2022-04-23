@@ -1,6 +1,8 @@
 package app.entities.order;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 import app.entities.business.Business;
 import app.entities.driver.Driver;
@@ -9,7 +11,9 @@ import app.entities.user.User;
 
 public class Order implements Comparable<Order> {
 	
-	private int id;
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	
+	private UUID id;
 	
 	private User client;
 	
@@ -32,7 +36,7 @@ public class Order implements Comparable<Order> {
 	 * @param status
 	 * @param data
 	 */
-	public Order(int id, User client, Business business, Driver driver, LocalDateTime timePlacedOrder, OrderStatus status,
+	public Order(UUID id, User client, Business business, Driver driver, LocalDateTime timePlacedOrder, OrderStatus status,
 			OrderData data) {
 		super();
 		this.id = id;
@@ -47,19 +51,11 @@ public class Order implements Comparable<Order> {
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
-
+	
 	/**
 	 * @return the client
 	 */
@@ -153,32 +149,88 @@ public class Order implements Comparable<Order> {
 		this.data = data;
 	}
 	
+	/**
+	 * Add an orderItem to orderData
+	 * 
+	 * @param item
+	 */
+	public void addOrderItem(OrderItem item) {
+		data.addItem(item);
+	}
+	
+	/**
+	 * @return the price of the order
+	 */
 	public double getPrice() {
 		return data.getPrice();
 	}
 	
-	public void prepareOrder(Order order) {
-		business.completeOrder(order);
+	/**
+	 * Place the order. Used to recreate the order process only
+	 */
+	public void placeOrder() {
+		client.addOrder(this);
+		business.addOrder(this);
+	}
+	
+	/**
+	 * Prepare the order. Used to recreate the order process only
+	 */
+	public void prepareOrder() {
+		business.completeOrder(this);
+	}
+	
+	/**
+	 * Pick up the order. Used to recreate the order process only
+	 */
+	public void pickUp() {
+		// Driver can only accept orders that have no driver
+		Driver finalDriver = driver;
+		this.setDriver(null);
+		finalDriver.acceptOrder(this);
+	}
+	
+	/**
+	 * Deliver the order. Used to recreate the order process only
+	 */
+	public void deliver() {
+		driver.finishDelivery();
 	}
 	
 	@Override
 	public int compareTo(Order o) {
-		if (this.timePlacedOrder.equals(o.timePlacedOrder)) {
-			return this.id - o.id;
-		}
 		return -this.timePlacedOrder.compareTo(o.timePlacedOrder); // latest first
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("Order #%d: [business: %s], [user: %s], [price: %f], [status: %s]", id, business.getName(), client.getName(), getPrice(), status.name());
+		return String.format("Order %s: [business: %s], [user: %s], [price: %f], [status: %s]", id.toString(), business.getName(), client.getName(), getPrice(), status.name());
 	}
 	
-//	int id, User client, Business business, Driver driver, LocalDateTime timePlacedOrder, OrderStatus status,
-//	OrderData data
-
-//	public String toCSV() {
-//		return String.format("%d,", null)
-//	}
+	public String toCSV() {
+		String clientId = "NULL";
+		if (client != null) {
+			clientId = client.getId().toString();
+		}
+		String businessId = "NULL";
+		if (business != null) {
+			businessId = business.getId().toString();
+		}
+		String driverId = "NULL";
+		if (driver != null) {
+			driverId = driver.getId().toString();
+		}
+		return String.format("%s,%s,%s,%s,%s,%s", 
+				id.toString(),
+				clientId,
+				businessId,
+				driverId,
+				timePlacedOrder.format(DATE_FORMATTER),
+				status.toString());
+	}
+	
+	public String getOrderDataToCSV() {
+		return data.toCSV(id);
+	}
 
 }

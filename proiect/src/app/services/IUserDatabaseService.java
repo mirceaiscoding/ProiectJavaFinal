@@ -2,6 +2,7 @@ package app.services;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import app.entities.user.User;
 
@@ -11,9 +12,9 @@ public interface IUserDatabaseService {
      * Loads data from CSV file
      * 
      * @throws IOException if a path is wrong
-     * @throws CSVBadCollumnLengthException if a line doesn't have the right number of collums
+     * @throws CSVBadColumnLengthException if a line doesn't have the right number of columns
      */
-    void loadData() throws IOException, CSVBadCollumnLengthException;
+    void loadData() throws IOException, CSVBadColumnLengthException;
     
     /**
      * Save data to CSV file
@@ -37,5 +38,11 @@ public interface IUserDatabaseService {
 	 * @param user the user to add
 	 */
 	public void addUser(User user);
+
+	/**
+	 * @param id
+	 * @return the user with the specified id of null if none is found
+	 */
+	User getUserById(UUID id);
 
 }
