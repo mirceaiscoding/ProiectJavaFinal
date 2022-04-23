@@ -50,8 +50,8 @@ public class OrderFactory {
 	 * @return the order that was placed or null if failed
 	 */
 	public Order placeNewOrder() {
-		// try to pay for order
 		OrderData orderData = new OrderData(orderItems); 
+		// try to pay for order
 		try {			
 			double ammount = orderData.getPrice();
 			System.out.println("Transfering money from client to business. Ammount: " + ammount);

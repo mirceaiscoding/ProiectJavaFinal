@@ -1,0 +1,2 @@
+2022-04-24 00:29: Added to user account balance: id: 62fcb191-9877-479c-a3d5-9fc84a38b37b new balance: 100.000000
+2022-04-24 00:44: Added product to business: business id: 209e5152-566e-4c52-817a-7fc5dcd52f48 product: Tomi picant

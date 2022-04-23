@@ -15,6 +15,7 @@ import app.entities.order.OrderItem;
 import app.entities.order.OrderStatus;
 import app.entities.user.User;
 import app.services.ActionsService;
+import app.services.AuditService;
 import app.services.BusinessCSVDatabaseService;
 import app.services.CSVBadColumnLengthException;
 import app.services.DriverCSVDatabaseService;
@@ -74,11 +75,16 @@ public class Main {
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
+		
 		IActionsService actionsService = ActionsService.getInstance();
+		
 		IBusinessDatabaseService businessDatabaseService = BusinessCSVDatabaseService.getInstance();
 		IUserDatabaseService userDatabaseService = UserCSVDatabaseService.getInstance();
 		IDriverDatabaseService driverDatabaseService = DriverCSVDatabaseService.getInstance();
 		IOrdersDatabaseService ordersDatabaseService = OrdersCSVDatabaseService.getInstance();
+		
+		AuditService auditService = AuditService.getInstance();
+		
 		try {
 			businessDatabaseService.loadData();
 			System.out.println("LOADED BUSINESS FROM CSV: " + businessDatabaseService.getBusinesses());
@@ -117,6 +123,7 @@ public class Main {
 						userDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("Added user:\n" + user);
+						auditService.logMessage(String.format("Added user: id: %s name: %s", user.getId().toString(), user.getName()));
 						printDelimiter();
 					} catch (IOException e) {
 						System.out.println("Error while adding user");
@@ -136,6 +143,7 @@ public class Main {
 						businessDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("Added business:\n" + business);
+						auditService.logMessage(String.format("Added business: id: %s name: %s", business.getId().toString(), business.getName()));
 						printDelimiter();
 					} catch (IOException e1) {
 						System.out.println("Error while adding business");
@@ -151,6 +159,7 @@ public class Main {
 						driverDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("Added driver:\n" + driver);
+						auditService.logMessage(String.format("Added driver: id: %s name: %s", driver.getId().toString(), driver.getName()));
 						printDelimiter();
 					} catch (IOException e) {
 						System.out.println("Error while adding driver");
@@ -160,10 +169,15 @@ public class Main {
 				}
 				case 3:
 					// Get user account balance
-					User user = pickUser(scanner, userDatabaseService);
-					printDelimiter();
-					System.out.println("User balance: " + user.getAccountBalance());
-					printDelimiter();
+					try {
+						User user = pickUser(scanner, userDatabaseService);
+						printDelimiter();
+						System.out.println("User balance: " + user.getAccountBalance());
+						auditService.logMessage(String.format("Get user account balance: id: %s balance: %d", user.getId().toString(), user.getAccountBalance()));
+						printDelimiter();
+					} catch (IOException e2) {
+						e2.printStackTrace();
+					}
 					break;
 				case 4:
 					// Add founds
@@ -176,10 +190,15 @@ public class Main {
 						scanner.next();
 					}
 					double ammount = scanner.nextDouble();
-					actionsService.addFoundsToUser(userToAddFounds, ammount);
-					printDelimiter();
-					System.out.println("New user balance: " + userToAddFounds.getAccountBalance());
-					printDelimiter();
+					try {
+						actionsService.addFoundsToUser(userToAddFounds, ammount);
+						printDelimiter();
+						System.out.println("New user balance: " + userToAddFounds.getAccountBalance());
+						auditService.logMessage(String.format("Added to user account balance: id: %s new balance: %f", userToAddFounds.getId().toString(), userToAddFounds.getAccountBalance()));
+						printDelimiter();
+					} catch (IOException e2) {
+						e2.printStackTrace();
+					}
 					break;
 				case 5:
 					// Add product to business
@@ -190,6 +209,7 @@ public class Main {
 						businessDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("New business products: " + business.getProducts());
+						auditService.logMessage(String.format("Added product to business: business id: %s product: %s", business.getId().toString(), product.getName()));
 						printDelimiter();
 					} catch (IOException e1) {
 						System.out.println("Error while adding product to business");
@@ -235,6 +255,7 @@ public class Main {
 							ordersDatabaseService.saveData();
 							printDelimiter();
 							System.out.println("Placed order: " + order);
+							auditService.logMessage(String.format("Placed order: id: business: %s client: %s", order.getId().toString(), businessToOrderFrom.getName(), userThatOrders.getName()));
 							printDelimiter();
 						} else {
 							System.out.println("Order can't be empty");
@@ -257,6 +278,7 @@ public class Main {
 						ordersDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("Prepared order: " + orderToPrepare);
+						auditService.logMessage(String.format("Prepared order: id: %s", orderToPrepare.getId().toString()));
 						printDelimiter();
 					} catch (IOException e) {
 						System.out.println("Error preparing order");
@@ -276,6 +298,7 @@ public class Main {
 						ordersDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("Pickup order: " + orderToPickup);
+						auditService.logMessage(String.format("Picked up order: id: %s driver: %s", orderToPickup.getId().toString(), freeDriver.getName()));
 						printDelimiter();
 					} catch (IOException e) {
 						System.out.println("Error picking up order");
@@ -309,6 +332,7 @@ public class Main {
 						ordersDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("Completed order: " + orderToGet);
+						auditService.logMessage(String.format("Completed order: id: %s", orderToGet.getId().toString()));
 						printDelimiter();
 					} catch (Exception e) {
 						System.out.println("Couldn't complete order");
