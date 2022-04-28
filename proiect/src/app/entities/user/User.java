@@ -15,10 +15,11 @@ public class User extends Person {
 	
 	private final UUID id;
 	
-	public User(String name, String email, String phoneNumber, UserAddress adress, UUID id) {
+	public User(String name, String email, String phoneNumber, UserAddress adress, UUID id, double accountBalance) {
 		super(name, email, phoneNumber);
 		this.id = id;
 		this.address = adress;
+		this.setAccountBalance(accountBalance);
 	}
 	
 	/**
@@ -110,7 +111,7 @@ public class User extends Person {
 	}
 	
 	public String toCSV() {
-		return String.format("%s,%s,%s,%s,%s,%s,%s,%s", 
+		return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%f", 
 				id.toString(),
 				super.name, 
 				super.email, 
@@ -118,7 +119,8 @@ public class User extends Person {
 				address.getCountry().toString(),
 				address.getCity().toString(),
 				address.getAdressLine1(),
-				address.getAdressLine2());
+				address.getAdressLine2(),
+				getAccountBalance());
 	}
 
 	/**

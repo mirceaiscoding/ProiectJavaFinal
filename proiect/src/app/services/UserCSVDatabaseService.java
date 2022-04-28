@@ -28,7 +28,7 @@ public class UserCSVDatabaseService implements IUserDatabaseService {
 	
 	private static final String COMMA_DELIMITER = ",";
 	
-	private static final int COLLUMS_NUMBER = 8;
+	private static final int COLLUMS_NUMBER = 9;
 
     private static UserCSVDatabaseService instance = null;
 	
@@ -66,8 +66,9 @@ public class UserCSVDatabaseService implements IUserDatabaseService {
     	        City city = City.valueOf(values[5]);
     	        String addressLine1 = values[6];
     	        String addressLine2 = values[7];
+    	        double accountBalance = Double.valueOf(values[8]);
     	        
-    	        users.add(new User(name, email, phoneNumber, new UserAddress(country, city, addressLine1, addressLine2), id));
+    	        users.add(new User(name, email, phoneNumber, new UserAddress(country, city, addressLine1, addressLine2), id, accountBalance));
     	    }
     	}
     }

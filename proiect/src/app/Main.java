@@ -173,7 +173,7 @@ public class Main {
 						User user = pickUser(scanner, userDatabaseService);
 						printDelimiter();
 						System.out.println("User balance: " + user.getAccountBalance());
-						auditService.logMessage(String.format("Get user account balance: id: %s balance: %d", user.getId().toString(), user.getAccountBalance()));
+						auditService.logMessage(String.format("Get user account balance: id: %s balance: %f", user.getId().toString(), user.getAccountBalance()));
 						printDelimiter();
 					} catch (IOException e2) {
 						e2.printStackTrace();

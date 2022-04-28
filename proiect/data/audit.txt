@@ -1,2 +1,12 @@
-2022-04-24 00:29: Added to user account balance: id: 62fcb191-9877-479c-a3d5-9fc84a38b37b new balance: 100.000000
-2022-04-24 00:44: Added product to business: business id: 209e5152-566e-4c52-817a-7fc5dcd52f48 product: Tomi picant
+2022-04-29 01:44: Added user: id: 788e201f-76ad-41bf-b600-cdb65d614326 name: Mircea
+2022-04-29 01:45: Added driver: id: 79be90a1-8d9a-46a9-9aa9-6f15cfb3cefe name: Gabu
+2022-04-29 01:46: Added business: id: ffa187fe-0e3b-4854-923f-bfab6e166389 name: Osanu
+2022-04-29 01:48: Added product to business: business id: ffa187fe-0e3b-4854-923f-bfab6e166389 product: Sarmale
+2022-04-29 01:49: Added product to business: business id: ffa187fe-0e3b-4854-923f-bfab6e166389 product: Mamaliga
+2022-04-29 01:51: Get user account balance: id: 788e201f-76ad-41bf-b600-cdb65d614326 balance: 0.000000
+2022-04-29 01:52: Added to user account balance: id: 788e201f-76ad-41bf-b600-cdb65d614326 new balance: 160.000000
+2022-04-29 01:53: Placed order: id: business: 1adbd331-5cb5-43b4-87a4-bebd08284b13 client: Osanu
+2022-04-29 01:53: Prepared order: id: 1adbd331-5cb5-43b4-87a4-bebd08284b13
+2022-04-29 01:53: Picked up order: id: 1adbd331-5cb5-43b4-87a4-bebd08284b13 driver: Gabu
+2022-04-29 01:53: Completed order: id: 1adbd331-5cb5-43b4-87a4-bebd08284b13
+2022-04-29 01:53: Get user account balance: id: 788e201f-76ad-41bf-b600-cdb65d614326 balance: 145.000000
