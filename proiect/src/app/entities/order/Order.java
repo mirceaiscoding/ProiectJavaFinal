@@ -4,12 +4,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import app.entities.HasToCSV;
 import app.entities.business.Business;
 import app.entities.driver.Driver;
 import app.entities.user.User;
 
 
-public class Order implements Comparable<Order> {
+public class Order extends HasToCSV implements Comparable<Order> {
 	
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	

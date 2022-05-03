@@ -1,6 +1,6 @@
 package app.entities;
 
-public class AccountBalanceHolder {
+public abstract class AccountBalanceHolder extends HasToCSV {
 
 	private double accountBalance;
 	

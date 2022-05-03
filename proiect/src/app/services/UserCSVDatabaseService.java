@@ -75,10 +75,7 @@ public class UserCSVDatabaseService implements IUserDatabaseService {
     
     @Override
     public void saveData() throws IOException {
-    	try (BufferedWriter writer = Files.newBufferedWriter(PATH_TO_CSV)) {
-    	    List<String> dataToCSV = users.stream().map(b -> b.toCSV()).toList();
-    	    writer.write(String.join("\n", dataToCSV));
-    	}
+    	CSVDatabaseWriteService.write(users, PATH_TO_CSV);
     }
 
 	@Override

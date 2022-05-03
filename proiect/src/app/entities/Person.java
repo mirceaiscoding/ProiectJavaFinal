@@ -2,7 +2,7 @@ package app.entities;
 
 import java.util.Scanner;
 
-public class Person extends AccountBalanceHolder{
+public abstract class Person extends AccountBalanceHolder{
 	
 	protected String name;
 	

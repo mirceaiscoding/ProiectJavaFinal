@@ -1,7 +1,6 @@
 package app.services;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -66,10 +65,7 @@ public class DriverCSVDatabaseService implements IDriverDatabaseService {
     
     @Override
     public void saveData() throws IOException {
-    	try (BufferedWriter writer = Files.newBufferedWriter(PATH_TO_CSV)) {
-    	    List<String> dataToCSV = drivers.stream().map(d -> d.toCSV()).toList();
-    	    writer.write(String.join("\n", dataToCSV));
-    	}
+    	CSVDatabaseWriteService.write(drivers, PATH_TO_CSV);
     }
 
 	@Override

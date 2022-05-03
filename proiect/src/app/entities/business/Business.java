@@ -11,7 +11,7 @@ import app.entities.order.Order;
 import app.entities.order.OrderStatus;
 
 
-public class Business extends AccountBalanceHolder{
+public class Business extends AccountBalanceHolder {
 	
 	protected final UUID id;
 	

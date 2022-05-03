@@ -1,7 +1,6 @@
 package app.services;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -86,14 +85,10 @@ public class BusinessCSVDatabaseService implements IBusinessDatabaseService{
     
     @Override
     public void saveData() throws IOException {
-    	try (BufferedWriter writer = Files.newBufferedWriter(PATH_TO_CSV)) {
-    	    List<String> dataToCSV = businesses.stream().map(b -> b.toCSV()).toList();
-    	    writer.write(String.join("\n", dataToCSV));
-    	}
-    	try (BufferedWriter writer = Files.newBufferedWriter(PATH_TO_PRODUCTS_CSV)) {
-    	    List<String> dataToCSV = businesses.stream().map(b -> b.productsToCSV()).toList();
-    	    writer.write(String.join("\n", dataToCSV));
-    	}
+    	CSVDatabaseWriteService.write(businesses, PATH_TO_CSV);
+    	
+    	List<String> dataToCSV = businesses.stream().map(b -> b.productsToCSV()).toList();
+    	CSVDatabaseWriteService.writeCSV(dataToCSV, PATH_TO_PRODUCTS_CSV);
     }
 
 
