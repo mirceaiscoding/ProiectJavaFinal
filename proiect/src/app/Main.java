@@ -22,8 +22,8 @@ import app.services.DriverCSVDatabaseService;
 import app.services.IActionsService;
 import app.services.IBusinessDatabaseService;
 import app.services.IDriverDatabaseService;
+import app.services.IGenericDatabaseService;
 import app.services.IOrdersDatabaseService;
-import app.services.IUserDatabaseService;
 import app.services.OrdersCSVDatabaseService;
 import app.services.UserCSVDatabaseService;
 
@@ -79,7 +79,7 @@ public class Main {
 		IActionsService actionsService = ActionsService.getInstance();
 		
 		IBusinessDatabaseService businessDatabaseService = BusinessCSVDatabaseService.getInstance();
-		IUserDatabaseService userDatabaseService = UserCSVDatabaseService.getInstance();
+		IGenericDatabaseService<User> userDatabaseService = UserCSVDatabaseService.getInstance();
 		IDriverDatabaseService driverDatabaseService = DriverCSVDatabaseService.getInstance();
 		IOrdersDatabaseService ordersDatabaseService = OrdersCSVDatabaseService.getInstance();
 		
@@ -87,16 +87,16 @@ public class Main {
 		
 		try {
 			businessDatabaseService.loadData();
-			System.out.println("LOADED BUSINESS FROM CSV: " + businessDatabaseService.getBusinesses());
+			System.out.println("LOADED BUSINESS FROM CSV: " + businessDatabaseService.getAll());
 			
 			userDatabaseService.loadData();
-			System.out.println("LOADED USERS FROM CSV: " + userDatabaseService.getUsers());
+			System.out.println("LOADED USERS FROM CSV: " + userDatabaseService.getAll());
 			
 			driverDatabaseService.loadData();
-			System.out.println("LOADED DRIVERS FROM CSV: " + driverDatabaseService.getDrivers());
+			System.out.println("LOADED DRIVERS FROM CSV: " + driverDatabaseService.getAll());
 			
 			ordersDatabaseService.loadData();
-			System.out.println("LOADED ORDERS FROM CSV: " + ordersDatabaseService.getOrders());
+			System.out.println("LOADED ORDERS FROM CSV: " + ordersDatabaseService.getAll());
 
 		} catch (IOException | CSVBadColumnLengthException e1) {
 			System.out.println("Exception while loading data");
@@ -106,6 +106,18 @@ public class Main {
 		// Actions
 		try {
 			while (true) {
+				
+				// Save data from previous command
+				try {
+					businessDatabaseService.saveData();
+					userDatabaseService.saveData();
+					driverDatabaseService.saveData();
+					businessDatabaseService.saveData();
+				} catch (IOException e3) {
+					e3.printStackTrace();
+				}
+				
+				
 				printCommands();
 				System.out.println("Enter the command number");
 				while(!scanner.hasNextInt()) {
@@ -119,7 +131,7 @@ public class Main {
 					// Add user
 					User user = new User(scanner);
 					try {
-						userDatabaseService.addUser(user);
+						userDatabaseService.add(user);
 						userDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("Added user:\n" + user);
@@ -139,7 +151,7 @@ public class Main {
 					String name = scanner.nextLine();
 					Business business = BusinessFactory.makeBusiness(BusinessType.valueOf(type), name);
 					try {
-						businessDatabaseService.addBusiness(business);
+						businessDatabaseService.add(business);
 						businessDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("Added business:\n" + business);
@@ -155,7 +167,7 @@ public class Main {
 					// Add driver
 					Driver driver = new Driver(scanner);
 					try {
-						driverDatabaseService.addDriver(driver);
+						driverDatabaseService.add(driver);
 						driverDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("Added driver:\n" + driver);
@@ -257,6 +269,7 @@ public class Main {
 							printDelimiter();
 							System.out.println("Placed order: " + order);
 							auditService.logMessage(String.format("Placed order: id: business: %s client: %s", order.getId().toString(), businessToOrderFrom.getName(), userThatOrders.getName()));
+							userDatabaseService.saveData();
 							printDelimiter();
 						} else {
 							System.out.println("Order can't be empty");
@@ -360,7 +373,7 @@ public class Main {
 	 * @return the picked business
 	 */
 	private static Business pickBusiness(Scanner scanner, IActionsService service, IBusinessDatabaseService businessDatabaseService) {
-		List<Business> businesses = businessDatabaseService.getBusinesses();
+		List<Business> businesses = businessDatabaseService.getAll();
 		if (businesses.isEmpty()) {
 			System.out.println("No businesses!");
 			return null;
@@ -452,8 +465,8 @@ public class Main {
 	 * @param service
 	 * @return the picked user
 	 */
-	private static User pickUser(Scanner scanner, IUserDatabaseService userDatabaseService) {
-		List<User> users = userDatabaseService.getUsers();
+	private static User pickUser(Scanner scanner, IGenericDatabaseService<User> userDatabaseService) {
+		List<User> users = userDatabaseService.getAll();
 		if (users.isEmpty()) {
 			System.out.println("No users!");
 			return null;

@@ -121,7 +121,8 @@ public class Business extends AccountBalanceHolder {
 	 */
 	public void completeOrder(Order order) {
 		if (!futureOrders.contains(order) || order.getStatus() != OrderStatus.PREPERING) {
-			throw new IllegalArgumentException("This order can not be completed");
+			System.out.println("Future orders: " + futureOrders);
+			throw new IllegalArgumentException("This order can not be completed " + order);
 		}
 		this.completedOrders.add(order);
 		this.futureOrders.remove(order);

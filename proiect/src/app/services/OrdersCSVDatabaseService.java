@@ -38,7 +38,7 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 
 	private List<Order> orders = new ArrayList<>();
 
-	private IUserDatabaseService userDatabaseService = UserCSVDatabaseService.getInstance();
+	private IGenericDatabaseService<User> userDatabaseService = UserCSVDatabaseService.getInstance();
 	private IDriverDatabaseService driverDatabaseService = DriverCSVDatabaseService.getInstance();
 	private IBusinessDatabaseService businessDatabaseService = BusinessCSVDatabaseService.getInstance();
 
@@ -67,19 +67,19 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 			String clientId = values[1];
 			User client = null;
 			if (!clientId.equals("NULL")) {
-				client = userDatabaseService.getUserById(UUID.fromString(clientId));
+				client = userDatabaseService.getById(UUID.fromString(clientId));
 			}
 
 			String businessId = values[2];
 			Business business = null;
 			if (!businessId.equals("NULL")) {
-				business = businessDatabaseService.getBusinessById(UUID.fromString(businessId));
+				business = businessDatabaseService.getById(UUID.fromString(businessId));
 			}
 
 			String driverId = values[3];
 			Driver driver = null;
 			if (!driverId.equals("NULL")) {
-				driver = driverDatabaseService.getDriverById(UUID.fromString(driverId));
+				driver = driverDatabaseService.getById(UUID.fromString(driverId));
 			}
 
 			LocalDateTime timePlacedOrder = LocalDateTime.parse(values[4], Order.DATE_FORMATTER);
@@ -96,7 +96,7 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 			double price = Double.parseDouble(values[2]);
 			int quantity = Integer.parseInt(values[3]);
 
-			Order order = getOrderById(orderId);
+			Order order = getById(orderId);
 			order.addOrderItem(new OrderItem(new Product(name, price), quantity));
 		}
 
@@ -130,7 +130,7 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 		}
 	}
 
-	public Order getOrderById(UUID id) {
+	public Order getById(UUID id) {
 		try {
 			Order order = (Order) orders.stream().filter(o -> o.getId().equals(id)).toArray()[0];
 			return order;
@@ -143,7 +143,7 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 	public void saveData() throws IOException {
 		CSVWriterService.write(orders, PATH_TO_CSV);
 
-		List<String> dataToCSV = orders.stream().map(o -> o.getOrderDataToCSV()).toList();
+		List<String> dataToCSV = orders.stream().map(b -> b.getOrderDataToCSV()).toList();
 		CSVWriterService.writeCSV(dataToCSV, PATH_TO_ORDER_DATA_CSV);
 	}
 
@@ -194,17 +194,17 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 	}
 
 	@Override
-	public List<Order> getOrders() {
+	public List<Order> getAll() {
 		return orders;
 	}
 
 	@Override
-	public void setOrders(List<Order> orders) {
+	public void setAll(List<Order> orders) {
 		this.orders = orders;
 	}
 
 	@Override
-	public void addOrder(Order order) {
+	public void add(Order order) {
 		orders.add(order);
 	}
 

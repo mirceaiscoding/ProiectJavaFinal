@@ -1,6 +1,5 @@
 package app.services;
 
-import java.io.IOException;
 import java.util.List;
 
 import app.entities.business.Business;
@@ -10,37 +9,7 @@ import app.entities.order.OrderFactory;
 import app.entities.order.OrderStatus;
 import app.entities.user.User;
 
-public interface IOrdersDatabaseService {
-
-    /**
-     * Loads data from CSV file
-     * 
-     * @throws IOException if a path is wrong
-     * @throws CSVBadColumnLengthException if a line doesn't have the right number of collums
-     */
-    void loadData() throws IOException, CSVBadColumnLengthException;
-    
-    /**
-     * Save data to CSV file
-     * 
-     * @throws IOException if a path is wrong
-     */
-    void saveData() throws IOException;
-
-	/**
-	 * @return the orders
-	 */
-	List<Order> getOrders();
-	
-	/**
-	 * @param orders the orders to set
-	 */
-	void setOrders(List<Order> orders);
-	
-	/**
-	 * @param order the order to add
-	 */
-	void addOrder(Order order);
+public interface IOrdersDatabaseService extends IGenericDatabaseService<Order> {
 	
 	/**
 	 * @param status

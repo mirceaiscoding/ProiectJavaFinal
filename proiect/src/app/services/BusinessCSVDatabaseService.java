@@ -79,17 +79,17 @@ public class BusinessCSVDatabaseService implements IBusinessDatabaseService {
 	}
 
 	@Override
-	public List<Business> getBusinesses() {
+	public List<Business> getAll() {
 		return businesses;
 	}
 
 	@Override
-	public void setBusinesses(List<Business> businesses) {
+	public void setAll(List<Business> businesses) {
 		this.businesses = businesses;
 	}
 
 	@Override
-	public void addBusiness(Business business) {
+	public void add(Business business) {
 		this.businesses.add(business);
 	}
 
@@ -99,7 +99,7 @@ public class BusinessCSVDatabaseService implements IBusinessDatabaseService {
 	}
 
 	@Override
-	public Business getBusinessById(UUID id) {
+	public Business getById(UUID id) {
 		try {
 			Business business = (Business) businesses.stream().filter(b -> b.getId().equals(id)).toArray()[0];
 			return business;

@@ -59,17 +59,17 @@ public class DriverCSVDatabaseService implements IDriverDatabaseService {
     }
 
 	@Override
-	public List<Driver> getDrivers() {
+	public List<Driver> getAll() {
 		return drivers;
 	}
 	
 	@Override
-	public void setDrivers(List<Driver> drivers) {
+	public void setAll(List<Driver> drivers) {
 		this.drivers = drivers;
 	}
 
 	@Override
-	public void addDriver(Driver driver) {
+	public void add(Driver driver) {
 		drivers.add(driver);
 	}
 
@@ -85,7 +85,7 @@ public class DriverCSVDatabaseService implements IDriverDatabaseService {
 	}
 
 	@Override
-	public Driver getDriverById(UUID id) {
+	public Driver getById(UUID id) {
 		try {			
 			Driver driver = (Driver) drivers.stream().filter(d -> d.getId().equals(id)).toArray()[0];
 			return driver;

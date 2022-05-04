@@ -16,7 +16,7 @@ import app.entities.user.UserAddress;
  * This class follows the singleton design pattern There can only exist one
  * instance of this class
  */
-public class UserCSVDatabaseService implements IUserDatabaseService {
+public class UserCSVDatabaseService implements IGenericDatabaseService<User> {
 
 	/**
 	 * Path to file where data is stored
@@ -70,22 +70,22 @@ public class UserCSVDatabaseService implements IUserDatabaseService {
 	}
 
 	@Override
-	public List<User> getUsers() {
+	public List<User> getAll() {
 		return users;
 	}
 
 	@Override
-	public void setUsers(List<User> users) {
+	public void setAll(List<User> users) {
 		this.users = users;
 	}
 
 	@Override
-	public void addUser(User user) {
+	public void add(User user) {
 		users.add(user);
 	}
 
 	@Override
-	public User getUserById(UUID id) {
+	public User getById(UUID id) {
 		try {
 			User user = (User) users.stream().filter(u -> u.getId().equals(id)).toArray()[0];
 			return user;

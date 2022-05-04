@@ -42,7 +42,7 @@ public class OrderData {
 	}
 	
 	public String toCSV(UUID orderId) {
-		return String.join(",", orderItems.stream().map(o -> o.toCSV(orderId)).toList());
+		return String.join("\n", orderItems.stream().map(o -> o.toCSV(orderId)).toList());
 	}
 
 	/**
