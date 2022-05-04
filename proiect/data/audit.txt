@@ -12,3 +12,9 @@
 2022-04-29 01:53: Get user account balance: id: 788e201f-76ad-41bf-b600-cdb65d614326 balance: 145.000000
 2022-05-04 00:41: Added to user account balance: id: 788e201f-76ad-41bf-b600-cdb65d614326 new balance: 20.000000
 2022-05-04 00:49: Added user: id: 2b9c12bf-8f8d-4474-9af3-20eae7b53fa1 name: Alexa
+2022-05-04 03:52: Get user account balance: id: 2b9c12bf-8f8d-4474-9af3-20eae7b53fa1 balance: 0.000000
+2022-05-04 03:54: Placed order: id: business: 6bf04acf-6425-469f-8437-24f7fdab8b29 client: Osanu
+2022-05-04 04:02: Added product to business: business id: ffa187fe-0e3b-4854-923f-bfab6e166389 product: Mici
+2022-05-04 04:03: Added to user account balance: id: 2b9c12bf-8f8d-4474-9af3-20eae7b53fa1 new balance: 60.000000
+2022-05-04 04:04: Placed order: id: business: d4af590c-3711-4bbb-9bff-f23bf761a32c client: Osanu
+2022-05-04 04:04: Prepared order: id: d4af590c-3711-4bbb-9bff-f23bf761a32c

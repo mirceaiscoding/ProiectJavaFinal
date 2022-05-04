@@ -9,7 +9,7 @@ import java.util.List;
 
 import app.entities.HasToCSV;
 
-public class CSVDatabaseWriteService {
+public class CSVWriterService {
 
 	/**
 	 * Writes the collection of objects in CSV format

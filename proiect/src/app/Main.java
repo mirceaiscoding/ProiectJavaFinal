@@ -192,6 +192,7 @@ public class Main {
 					double ammount = scanner.nextDouble();
 					try {
 						actionsService.addFoundsToUser(userToAddFounds, ammount);
+						userDatabaseService.saveData();
 						printDelimiter();
 						System.out.println("New user balance: " + userToAddFounds.getAccountBalance());
 						auditService.logMessage(String.format("Added to user account balance: id: %s new balance: %f", userToAddFounds.getId().toString(), userToAddFounds.getAccountBalance()));

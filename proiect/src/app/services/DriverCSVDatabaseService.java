@@ -1,8 +1,6 @@
 package app.services;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -20,9 +18,7 @@ public class DriverCSVDatabaseService implements IDriverDatabaseService {
 	 * Path to file where data is stored
 	 */
 	private static final Path PATH_TO_CSV = Paths.get("data/drivers.csv");
-	
-	private static final String COMMA_DELIMITER = ",";
-	
+		
 	private static final int COLLUMS_NUMBER = 4;
 
     private static DriverCSVDatabaseService instance = null;
@@ -46,26 +42,20 @@ public class DriverCSVDatabaseService implements IDriverDatabaseService {
     
     @Override
     public void loadData() throws IOException, CSVBadColumnLengthException {
-    	try (BufferedReader reader = Files.newBufferedReader(PATH_TO_CSV)) {
-    	    String line;
-    	    while ((line = reader.readLine()) != null) {
-    	        String[] values = line.split(COMMA_DELIMITER);
-    	        if (values.length != COLLUMS_NUMBER) {
-    	        	throw new CSVBadColumnLengthException(String.format("Expected %d collumns, but %d were found", COLLUMS_NUMBER, values.length));
-    	        }
-    	        UUID id = UUID.fromString(values[0]);
-    	        String name = values[1];
-    	        String email = values[2];
-    	        String phoneNumber = values[3];
-    	        
-    	        drivers.add(new Driver(name, email, phoneNumber, id));
-    	    }
+    	List<String[]> data = CSVReaderService.readCSV(PATH_TO_CSV, COLLUMS_NUMBER);
+		for (String[] values : data) {
+	        UUID id = UUID.fromString(values[0]);
+	        String name = values[1];
+	        String email = values[2];
+	        String phoneNumber = values[3];
+	        
+	        drivers.add(new Driver(name, email, phoneNumber, id));
     	}
     }
     
     @Override
     public void saveData() throws IOException {
-    	CSVDatabaseWriteService.write(drivers, PATH_TO_CSV);
+    	CSVWriterService.write(drivers, PATH_TO_CSV);
     }
 
 	@Override
