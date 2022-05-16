@@ -125,7 +125,9 @@ public class Main {
 				}
 				int i = scanner.nextInt();
 				scanner.nextLine(); // consume \n
-				System.out.println(COMMANDS[i]);
+				if (i >= 0 && i < 12) {					
+					System.out.println(COMMANDS[i]);
+				}
 				switch (i) {
 				case 0: {
 					// Add user

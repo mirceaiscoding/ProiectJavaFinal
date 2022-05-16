@@ -1,31 +1,9 @@
-2022-05-04 15:03: Added user: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 name: Alexa
-2022-05-04 15:03: Added business: id: 9408c77d-5c23-46d5-89d1-990eefc08002 name: Lidl
-2022-05-04 15:04: Added product to business: business id: 9408c77d-5c23-46d5-89d1-990eefc08002 product: Humus
-2022-05-04 15:04: Added product to business: business id: 9408c77d-5c23-46d5-89d1-990eefc08002 product: Tomi picant
-2022-05-04 15:04: Added product to business: business id: 9408c77d-5c23-46d5-89d1-990eefc08002 product: Salata
-2022-05-04 15:04: Added product to business: business id: 9408c77d-5c23-46d5-89d1-990eefc08002 product: Inghetata
-2022-05-04 15:05: Added product to business: business id: 9408c77d-5c23-46d5-89d1-990eefc08002 product: Ton in apa
-2022-05-04 15:05: Added driver: id: 65e1e4ce-c23c-4fe6-9395-be190e53b63c name: Mihai
-2022-05-04 15:05: Added to user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 new balance: 60.000000
-2022-05-04 15:06: Placed order: id: business: 8e37849d-b264-462b-940f-a6247bbc8992 client: Lidl
-2022-05-04 15:06: Prepared order: id: 8e37849d-b264-462b-940f-a6247bbc8992
-2022-05-04 15:06: Picked up order: id: 8e37849d-b264-462b-940f-a6247bbc8992 driver: Mihai
-2022-05-04 15:06: Completed order: id: 8e37849d-b264-462b-940f-a6247bbc8992
-2022-05-04 15:07: Get user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 balance: 23.500000
-2022-05-04 15:25: Placed order: id: business: bb38230b-2b92-4f5c-9d70-a02a486e243b client: Lidl
-2022-05-04 15:26: Placed order: id: business: 0b00d1e7-2ea4-41c8-ab9e-a5d1a4a18452 client: Lidl
-2022-05-04 15:27: Get user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 balance: 36.000000
-2022-05-04 15:27: Prepared order: id: 0b00d1e7-2ea4-41c8-ab9e-a5d1a4a18452
-2022-05-04 15:27: Picked up order: id: 0b00d1e7-2ea4-41c8-ab9e-a5d1a4a18452 driver: Mihai
-2022-05-04 15:27: Completed order: id: 0b00d1e7-2ea4-41c8-ab9e-a5d1a4a18452
-2022-05-04 15:29: Get user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 balance: 36.000000
-2022-05-04 15:32: Placed order: id: business: fc9002f3-98fc-479c-82bf-a1b661a4370f client: Lidl
-2022-05-04 15:37: Added to user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 new balance: 106.000000
-2022-05-04 15:38: Placed order: id: business: 5ba9a0ff-be02-4107-86b8-54dc9ccac0e4 client: Lidl
-2022-05-04 15:39: Prepared order: id: 5ba9a0ff-be02-4107-86b8-54dc9ccac0e4
-2022-05-04 15:39: Picked up order: id: 5ba9a0ff-be02-4107-86b8-54dc9ccac0e4 driver: Mihai
-2022-05-04 15:40: Completed order: id: 5ba9a0ff-be02-4107-86b8-54dc9ccac0e4
-2022-05-04 15:43: Get user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 balance: 89.000000
-2022-05-04 15:44: Placed order: id: business: db639fc6-634d-4636-a1b6-fc59d618217f client: Lidl
-2022-05-04 15:44: Get user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 balance: 59.000000
-2022-05-04 15:44: Get user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 balance: 59.000000
+Added to user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 new balance: 159.000000: 2022-05-16 15:03
+Get user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 balance: 159.000000: 2022-05-16 15:03
+Placed order: id: business: dbf79f99-2aaf-4570-9a17-abc03360f3e1 client: Lidl: 2022-05-16 15:04
+Prepared order: id: dbf79f99-2aaf-4570-9a17-abc03360f3e1: 2022-05-16 15:04
+Prepared order: id: db639fc6-634d-4636-a1b6-fc59d618217f: 2022-05-16 15:04
+Picked up order: id: dbf79f99-2aaf-4570-9a17-abc03360f3e1 driver: Mihai: 2022-05-16 15:04
+Completed order: id: dbf79f99-2aaf-4570-9a17-abc03360f3e1: 2022-05-16 15:07
+Picked up order: id: db639fc6-634d-4636-a1b6-fc59d618217f driver: Mihai: 2022-05-16 15:07
+Completed order: id: db639fc6-634d-4636-a1b6-fc59d618217f: 2022-05-16 15:07

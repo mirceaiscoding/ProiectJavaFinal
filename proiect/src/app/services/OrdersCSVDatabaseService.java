@@ -45,8 +45,7 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 	/**
 	 * Private constructor
 	 */
-	private OrdersCSVDatabaseService() {
-	}
+	private OrdersCSVDatabaseService() {}
 
 	/**
 	 * @return the single instance of this service
@@ -60,7 +59,7 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 
 	@Override
 	public void loadData() throws IOException, CSVBadColumnLengthException {
-		List<String[]> data = CSVReaderService.readCSV(PATH_TO_CSV, COLLUMS_NUMBER);
+		List<String[]> data = CSVReaderServiceSingleton.getInstance().readCSV(PATH_TO_CSV, COLLUMS_NUMBER);
 		for (String[] values : data) {
 			UUID id = UUID.fromString(values[0]);
 
@@ -89,7 +88,7 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 			orders.add(new Order(id, client, business, driver, timePlacedOrder, status, new OrderData(emptyOrderData)));
 		}
 
-		data = CSVReaderService.readCSV(PATH_TO_ORDER_DATA_CSV, ORDER_DATA_COLLUMS_NUMBER);
+		data = CSVReaderServiceSingleton.getInstance().readCSV(PATH_TO_ORDER_DATA_CSV, ORDER_DATA_COLLUMS_NUMBER);
 		for (String[] values : data) {
 			UUID orderId = UUID.fromString(values[0]);
 			String name = values[1];
@@ -141,10 +140,10 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 
 	@Override
 	public void saveData() throws IOException {
-		CSVWriterService.write(orders, PATH_TO_CSV);
+		CSVWriterServiceSingleton.getInstance().write(orders, PATH_TO_CSV);
 
 		List<String> dataToCSV = orders.stream().map(b -> b.getOrderDataToCSV()).toList();
-		CSVWriterService.writeCSV(dataToCSV, PATH_TO_ORDER_DATA_CSV);
+		CSVWriterServiceSingleton.getInstance().writeCSV(dataToCSV, PATH_TO_ORDER_DATA_CSV);
 	}
 
 	@Override

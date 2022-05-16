@@ -52,7 +52,7 @@ public class BusinessCSVDatabaseService implements IBusinessDatabaseService {
 	@Override
 	public void loadData() throws IOException, CSVBadColumnLengthException {
 
-		List<String[]> data = CSVReaderService.readCSV(PATH_TO_CSV, COLLUMS_NUMBER);
+		List<String[]> data = CSVReaderServiceSingleton.getInstance().readCSV(PATH_TO_CSV, COLLUMS_NUMBER);
 		for (String[] values : data) {
 			UUID id = UUID.fromString(values[0]);
 			BusinessType type = BusinessType.valueOf(values[1]);
@@ -60,7 +60,7 @@ public class BusinessCSVDatabaseService implements IBusinessDatabaseService {
 			businesses.add(BusinessFactory.makeBusiness(id, type, name));
 		}
 
-		data = CSVReaderService.readCSV(PATH_TO_PRODUCTS_CSV, PRODUCTS_COLLUMS_NUMBER);
+		data = CSVReaderServiceSingleton.getInstance().readCSV(PATH_TO_PRODUCTS_CSV, PRODUCTS_COLLUMS_NUMBER);
 		for (String[] values : data) {
 			UUID id = UUID.fromString(values[0]);
 			String name = values[1];
@@ -72,10 +72,10 @@ public class BusinessCSVDatabaseService implements IBusinessDatabaseService {
 
 	@Override
 	public void saveData() throws IOException {
-		CSVWriterService.write(businesses, PATH_TO_CSV);
+		CSVWriterServiceSingleton.getInstance().write(businesses, PATH_TO_CSV);
 
 		List<String> dataToCSV = businesses.stream().map(b -> b.productsToCSV()).toList();
-		CSVWriterService.writeCSV(dataToCSV, PATH_TO_PRODUCTS_CSV);
+		CSVWriterServiceSingleton.getInstance().writeCSV(dataToCSV, PATH_TO_PRODUCTS_CSV);
 	}
 
 	@Override

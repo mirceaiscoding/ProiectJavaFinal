@@ -8,8 +8,22 @@ import java.util.List;
 
 import app.entities.HasToCSV;
 
-public class CSVWriterService {
+public class CSVWriterServiceSingleton {
 
+	private static CSVWriterServiceSingleton instance = null;
+	
+	private CSVWriterServiceSingleton() {}
+	
+	/**
+	 * @return the single instance of this service
+	 */
+	public static CSVWriterServiceSingleton getInstance() {
+		if (instance == null) {
+			instance = new CSVWriterServiceSingleton();
+		}
+		return instance;
+	}
+	
 	/**
 	 * Writes the collection of objects in CSV format
 	 * 
@@ -18,7 +32,7 @@ public class CSVWriterService {
 	 * @param pathToCSV where to write (will write over the current text)
 	 * @throws IOException
 	 */
-	public static <T extends HasToCSV> void write (List<T> objectsToWrite, Path pathToCSV) throws IOException {
+	public <T extends HasToCSV> void write (List<T> objectsToWrite, Path pathToCSV) throws IOException {
     	try (BufferedWriter writer = Files.newBufferedWriter(pathToCSV)) {
     	    List<String> dataToCSV = objectsToWrite.stream().map(b -> b.toCSV()).toList();
     	    writer.write(String.join("\n", dataToCSV));
@@ -32,7 +46,7 @@ public class CSVWriterService {
 	 * @param pathToCSV
 	 * @throws IOException
 	 */
-	public static void writeCSV (List<String> dataToCSV, Path pathToCSV) throws IOException {
+	public void writeCSV (List<String> dataToCSV, Path pathToCSV) throws IOException {
     	try (BufferedWriter writer = Files.newBufferedWriter(pathToCSV)) {
         	writer.write(String.join("\n", dataToCSV));
     	}

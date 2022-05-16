@@ -8,7 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CSVReaderService {
+public class CSVReaderServiceSingleton {
+	
+	private static CSVReaderServiceSingleton instance = null;
+	
+	private CSVReaderServiceSingleton() {}
+	
+	/**
+	 * @return the single instance of this service
+	 */
+	public static CSVReaderServiceSingleton getInstance() {
+		if (instance == null) {
+			instance = new CSVReaderServiceSingleton();
+		}
+		return instance;
+	}
 
 	private static final String COMMA_DELIMITER = ",";
 
@@ -19,7 +33,7 @@ public class CSVReaderService {
 	 * @throws CSVBadColumnLengthException
 	 * @throws IOException
 	 */
-	public static List<String[]> readCSV(Path pathToCSV, int numberOfColumns) throws CSVBadColumnLengthException, IOException{
+	public List<String[]> readCSV(Path pathToCSV, int numberOfColumns) throws CSVBadColumnLengthException, IOException{
 		List<String[]> data = new ArrayList<>();
     	try (BufferedReader reader = Files.newBufferedReader(pathToCSV)) {
     	    String line;

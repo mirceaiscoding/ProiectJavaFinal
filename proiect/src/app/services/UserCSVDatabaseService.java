@@ -47,7 +47,7 @@ public class UserCSVDatabaseService implements IGenericDatabaseService<User> {
 
 	@Override
 	public void loadData() throws IOException, CSVBadColumnLengthException {
-		List<String[]> data = CSVReaderService.readCSV(PATH_TO_CSV, COLLUMS_NUMBER);
+		List<String[]> data = CSVReaderServiceSingleton.getInstance().readCSV(PATH_TO_CSV, COLLUMS_NUMBER);
 		for (String[] values : data) {
 			UUID id = UUID.fromString(values[0]);
 			String name = values[1];
@@ -66,7 +66,7 @@ public class UserCSVDatabaseService implements IGenericDatabaseService<User> {
 
 	@Override
 	public void saveData() throws IOException {
-		CSVWriterService.write(users, PATH_TO_CSV);
+		CSVWriterServiceSingleton.getInstance().write(users, PATH_TO_CSV);
 	}
 
 	@Override

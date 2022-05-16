@@ -45,7 +45,7 @@ public class AuditService {
     	FileWriter fw = new FileWriter(file, true);
     	
     	try(BufferedWriter writer = new BufferedWriter(fw)){    		
-    		writer.write(String.format("%s: %s%n", LocalDateTime.now().format(DATE_FORMATTER), message));
+    		writer.write(String.format("%s: %s%n", message, LocalDateTime.now().format(DATE_FORMATTER)));
     	}
 		
 	}

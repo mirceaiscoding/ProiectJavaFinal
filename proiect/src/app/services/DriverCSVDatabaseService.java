@@ -42,7 +42,7 @@ public class DriverCSVDatabaseService implements IDriverDatabaseService {
     
     @Override
     public void loadData() throws IOException, CSVBadColumnLengthException {
-    	List<String[]> data = CSVReaderService.readCSV(PATH_TO_CSV, COLLUMS_NUMBER);
+    	List<String[]> data = CSVReaderServiceSingleton.getInstance().readCSV(PATH_TO_CSV, COLLUMS_NUMBER);
 		for (String[] values : data) {
 	        UUID id = UUID.fromString(values[0]);
 	        String name = values[1];
@@ -55,7 +55,7 @@ public class DriverCSVDatabaseService implements IDriverDatabaseService {
     
     @Override
     public void saveData() throws IOException {
-    	CSVWriterService.write(drivers, PATH_TO_CSV);
+    	CSVWriterServiceSingleton.getInstance().write(drivers, PATH_TO_CSV);
     }
 
 	@Override
