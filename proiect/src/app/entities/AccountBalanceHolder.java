@@ -1,6 +1,6 @@
 package app.entities;
 
-public class AccountBalanceHolder {
+public abstract class AccountBalanceHolder extends HasToCSV {
 
 	private double accountBalance;
 	
@@ -16,10 +16,10 @@ public class AccountBalanceHolder {
 	}
 
 	/**
-	 * @param accountBalance the accountBalance to set
+	 * @param accountBalance2 the accountBalance to set
 	 */
-	public void setAccountBalance(int accountBalance) {
-		this.accountBalance = accountBalance;
+	public void setAccountBalance(double accountBalance2) {
+		this.accountBalance = accountBalance2;
 	}
 	
 	/**

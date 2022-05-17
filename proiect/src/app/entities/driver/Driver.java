@@ -3,6 +3,7 @@ package app.entities.driver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 import app.entities.Person;
 import app.entities.Rating;
@@ -18,8 +19,11 @@ public class Driver extends Person{
 	
 	private List<Order> deliveredOrders;
 	
+	private final UUID id;
+	
 	public Driver(String name, String email, String phoneNumber, Rating rating) {
 		super(name, email, phoneNumber);
+		this.id = UUID.randomUUID();
 		this.rating = rating;
 		currentOrder = null;
 		deliveredOrders = new ArrayList<>();
@@ -27,6 +31,15 @@ public class Driver extends Person{
 	
 	public Driver(String name, String email, String phoneNumber) {
 		super(name, email, phoneNumber);
+		this.id = UUID.randomUUID();
+		this.rating = new Rating();
+		currentOrder = null;
+		deliveredOrders = new ArrayList<>();
+	}
+	
+	public Driver(String name, String email, String phoneNumber, UUID id) {
+		super(name, email, phoneNumber);
+		this.id = id;
 		this.rating = new Rating();
 		currentOrder = null;
 		deliveredOrders = new ArrayList<>();
@@ -34,6 +47,7 @@ public class Driver extends Person{
 	
 	public Driver(Scanner scanner) {
 		super(scanner);
+		this.id = UUID.randomUUID();
 		this.rating = new Rating();
 		currentOrder = null;
 		deliveredOrders = new ArrayList<>();
@@ -124,6 +138,20 @@ public class Driver extends Person{
 		currentOrder.setStatus(OrderStatus.ARRIVED);
 		deliveredOrders.add(currentOrder);
 		currentOrder = null;
+	}
+	
+	/**
+	 * @return the object in CSV format
+	 */
+	public String toCSV() {
+		return String.format("%s,%s,%s,%s", id.toString(), super.name, super.email, super.phoneNumber);
+	}
+
+	/**
+	 * @return the id
+	 */
+	public UUID getId() {
+		return id;
 	}
 	
 }

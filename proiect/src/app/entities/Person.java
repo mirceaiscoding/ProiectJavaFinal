@@ -2,13 +2,13 @@ package app.entities;
 
 import java.util.Scanner;
 
-public class Person extends AccountBalanceHolder{
+public abstract class Person extends AccountBalanceHolder{
 	
-	private String name;
+	protected String name;
 	
-	private String email;
+	protected String email;
 	
-	private String phoneNumber;
+	protected String phoneNumber;
 	
 	/**
 	 * @param name

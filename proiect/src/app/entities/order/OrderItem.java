@@ -2,6 +2,7 @@ package app.entities.order;
 
 
 import java.util.Scanner;
+import java.util.UUID;
 
 import app.entities.business.Product;
 
@@ -71,5 +72,9 @@ public class OrderItem {
 	 */
 	public double getPrice() {
 		return product.getPrice() * quantity;
+	}
+	
+	public String toCSV(UUID orderId) {
+		return String.format("%s,%s,%f,%d", orderId.toString(), product.getName(), product.getPrice(), quantity);
 	}
 }
