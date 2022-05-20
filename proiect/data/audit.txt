@@ -1,9 +1,33 @@
-Added to user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 new balance: 159.000000: 2022-05-16 15:03
-Get user account balance: id: baaa3214-dbc3-40f1-8f12-87df28f17be8 balance: 159.000000: 2022-05-16 15:03
-Placed order: id: business: dbf79f99-2aaf-4570-9a17-abc03360f3e1 client: Lidl: 2022-05-16 15:04
-Prepared order: id: dbf79f99-2aaf-4570-9a17-abc03360f3e1: 2022-05-16 15:04
-Prepared order: id: db639fc6-634d-4636-a1b6-fc59d618217f: 2022-05-16 15:04
-Picked up order: id: dbf79f99-2aaf-4570-9a17-abc03360f3e1 driver: Mihai: 2022-05-16 15:04
-Completed order: id: dbf79f99-2aaf-4570-9a17-abc03360f3e1: 2022-05-16 15:07
-Picked up order: id: db639fc6-634d-4636-a1b6-fc59d618217f driver: Mihai: 2022-05-16 15:07
-Completed order: id: db639fc6-634d-4636-a1b6-fc59d618217f: 2022-05-16 15:07
+Added driver: id: 893f07ac-e253-4579-aa84-968c3f8986be name: Andrei: 2022-05-18 13:48
+Added user: id: 0d0b631e-93ca-42da-b1c5-03adf174145a name: Mircea: 2022-05-18 14:05
+Added business: id: 4cff0492-85df-40ba-98d0-1e92047af2e1 name: Pescarul: 2022-05-18 22:45
+Added product to business: business id: 4cff0492-85df-40ba-98d0-1e92047af2e1 product: Dorada la gratar: 2022-05-18 22:46
+Get user account balance: id: 0d0b631e-93ca-42da-b1c5-03adf174145a balance: 100.000000: 2022-05-19 15:03
+Placed order: id: business: 56f11a8e-f9d2-46c4-92ad-ef9876b3e7b1 client: Pescarul: 2022-05-19 15:03
+Prepared order: id: 56f11a8e-f9d2-46c4-92ad-ef9876b3e7b1: 2022-05-19 15:03
+Picked up order: id: 56f11a8e-f9d2-46c4-92ad-ef9876b3e7b1 driver: Andrei: 2022-05-19 15:03
+Added product to business: business id: 4cff0492-85df-40ba-98d0-1e92047af2e1 product: Paine: 2022-05-19 15:04
+Added product to business: business id: 4cff0492-85df-40ba-98d0-1e92047af2e1 product: Salata: 2022-05-19 15:04
+Placed order: id: business: ca048d45-feb9-47f2-a36f-5cc624a47ffb client: Pescarul: 2022-05-19 15:04
+Prepared order: id: ca048d45-feb9-47f2-a36f-5cc624a47ffb: 2022-05-19 15:12
+Picked up order: id: ca048d45-feb9-47f2-a36f-5cc624a47ffb driver: Andrei: 2022-05-19 15:12
+Placed order: id: business: 883a7832-6599-43fc-ad6f-9d492fcd47e3 client: Pescarul: 2022-05-19 15:12
+Prepared order: id: 883a7832-6599-43fc-ad6f-9d492fcd47e3: 2022-05-19 15:12
+Added driver: id: e5a6f349-3832-469f-9cbf-9b3eff4520f9 name: Mihai: 2022-05-20 17:43
+Placed order: id: business: ddb8a1be-39b8-4790-8ee9-2f815cdb3fef client: Pescarul: 2022-05-20 17:44
+Prepared order: id: ddb8a1be-39b8-4790-8ee9-2f815cdb3fef: 2022-05-20 17:44
+Picked up order: id: 883a7832-6599-43fc-ad6f-9d492fcd47e3 driver: Mihai: 2022-05-20 17:44
+Completed order: id: 56f11a8e-f9d2-46c4-92ad-ef9876b3e7b1: 2022-05-20 18:20
+Completed order: id: 883a7832-6599-43fc-ad6f-9d492fcd47e3: 2022-05-20 18:20
+Completed order: id: ca048d45-feb9-47f2-a36f-5cc624a47ffb: 2022-05-20 18:21
+Picked up order: id: ddb8a1be-39b8-4790-8ee9-2f815cdb3fef driver: Andrei: 2022-05-20 18:21
+Added business: id: 40c338bb-93b6-494b-a58a-d461fa7a04b7 name: Lidl: 2022-05-20 18:24
+Added product to business: business id: 40c338bb-93b6-494b-a58a-d461fa7a04b7 product: Humus: 2022-05-20 18:25
+Added product to business: business id: 40c338bb-93b6-494b-a58a-d461fa7a04b7 product: Tomi picant: 2022-05-20 18:25
+Added product to business: business id: 40c338bb-93b6-494b-a58a-d461fa7a04b7 product: Ciabatta: 2022-05-20 18:44
+Placed order: id: business: fe1f4522-7145-40ff-9926-3ffcedd913ec client: Lidl: 2022-05-20 18:47
+Added to user account balance: id: 0d0b631e-93ca-42da-b1c5-03adf174145a new balance: 304.000000: 2022-05-20 18:47
+Prepared order: id: fe1f4522-7145-40ff-9926-3ffcedd913ec: 2022-05-20 18:47
+Picked up order: id: fe1f4522-7145-40ff-9926-3ffcedd913ec driver: Mihai: 2022-05-20 18:47
+Completed order: id: ddb8a1be-39b8-4790-8ee9-2f815cdb3fef: 2022-05-20 18:48
+Get user account balance: id: 0d0b631e-93ca-42da-b1c5-03adf174145a balance: 301.000000: 2022-05-20 18:48

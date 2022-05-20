@@ -195,7 +195,7 @@ public class Order extends HasToCSV implements Comparable<Order> {
 	 * Deliver the order. Used to recreate the order process only
 	 */
 	public void deliver() {
-		driver.finishDelivery();
+		status = OrderStatus.ARRIVED;
 	}
 	
 	@Override

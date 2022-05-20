@@ -63,7 +63,7 @@ public interface IOrdersDatabaseService extends IGenericDatabaseService<Order> {
 	 * 
 	 * @param orderToDeliver
 	 */
-	void deliverOrder(Order orderToDeliver);
+//	void deliverOrder(Order orderToDeliver);
 	
 	/**
 	 * Order must have status Delivering.

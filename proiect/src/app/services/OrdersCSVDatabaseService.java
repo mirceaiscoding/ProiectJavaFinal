@@ -181,10 +181,10 @@ public class OrdersCSVDatabaseService implements IOrdersDatabaseService {
 		freeDriver.acceptOrder(orderToPickup);
 	}
 
-	@Override
-	public void deliverOrder(Order orderToDeliver) {
-		orderToDeliver.getDriver().finishDelivery();
-	}
+//	@Override
+//	public void deliverOrder(Order orderToDeliver) {
+//		orderToDeliver.getDriver().finishDelivery();
+//	}
 
 	@Override
 	public void getOrderAndTip(Order orderToGet, double tip) {

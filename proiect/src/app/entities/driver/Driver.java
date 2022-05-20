@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+import app.database.services.DriverDatabaseService;
 import app.entities.Person;
 import app.entities.Rating;
 import app.entities.order.Order;
@@ -14,9 +15,7 @@ import app.entities.order.OrderStatus;
 public class Driver extends Person{
 
 	private Rating rating;
-	
-	private Order currentOrder;
-	
+		
 	private List<Order> deliveredOrders;
 	
 	private final UUID id;
@@ -25,7 +24,6 @@ public class Driver extends Person{
 		super(name, email, phoneNumber);
 		this.id = UUID.randomUUID();
 		this.rating = rating;
-		currentOrder = null;
 		deliveredOrders = new ArrayList<>();
 	}
 	
@@ -33,7 +31,6 @@ public class Driver extends Person{
 		super(name, email, phoneNumber);
 		this.id = UUID.randomUUID();
 		this.rating = new Rating();
-		currentOrder = null;
 		deliveredOrders = new ArrayList<>();
 	}
 	
@@ -41,17 +38,21 @@ public class Driver extends Person{
 		super(name, email, phoneNumber);
 		this.id = id;
 		this.rating = new Rating();
-		currentOrder = null;
 		deliveredOrders = new ArrayList<>();
+	}
+	
+	public Driver(String name, String email, String phoneNumber, UUID id, double accountBalance) {
+		this(name, email, phoneNumber, id);
+		this.setAccountBalance(accountBalance);
 	}
 	
 	public Driver(Scanner scanner) {
 		super(scanner);
 		this.id = UUID.randomUUID();
 		this.rating = new Rating();
-		currentOrder = null;
 		deliveredOrders = new ArrayList<>();
 	}
+
 
 	/**
 	 * @return the rating
@@ -71,21 +72,7 @@ public class Driver extends Person{
 	 * @return if the driver has no currentOrder to fulfill
 	 */
 	public boolean isFree() {
-		return currentOrder == null;
-	}
-
-	/**
-	 * @return the currentOrder
-	 */
-	public Order getCurrentOrder() {
-		return currentOrder;
-	}
-
-	/**
-	 * @param currentOrder the currentOrder to set
-	 */
-	public void setCurrentOrder(Order currentOrder) {
-		this.currentOrder = currentOrder;
+		return DriverDatabaseService.getInstance().isFree(this);
 	}
 
 	/**
@@ -117,28 +104,10 @@ public class Driver extends Person{
 		if (order.getStatus() != OrderStatus.AWAITING_PICKUP) {
 			throw new IllegalArgumentException("Order is not awaiting pick up");
 		}
-		currentOrder = order;
 		order.setDriver(this);
 		order.setStatus(OrderStatus.DELIVERING);
 	}
 	
-	/**
-	 * Finish a delivery. Change the order status to Arrived.
-	 * 
-	 * @throws IllegalStateException if driver has no current order
-	 * @throws IllegalArgumentException if order status is not Delivering
-	 */
-	public void finishDelivery() {
-		if (isFree()) {
-			throw new IllegalStateException("No order is being delivered");
-		}
-		if (currentOrder.getStatus() != OrderStatus.DELIVERING) {
-			throw new IllegalArgumentException("Order is not being delivered");
-		}
-		currentOrder.setStatus(OrderStatus.ARRIVED);
-		deliveredOrders.add(currentOrder);
-		currentOrder = null;
-	}
 	
 	/**
 	 * @return the object in CSV format

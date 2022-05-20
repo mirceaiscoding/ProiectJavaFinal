@@ -120,12 +120,6 @@ public class Business extends AccountBalanceHolder {
 	 * @throws IllegalArgumentException if order is not in futureOrders or status is not "Preparing"
 	 */
 	public void completeOrder(Order order) {
-		if (!futureOrders.contains(order) || order.getStatus() != OrderStatus.PREPERING) {
-			System.out.println("Future orders: " + futureOrders);
-			throw new IllegalArgumentException("This order can not be completed " + order);
-		}
-		this.completedOrders.add(order);
-		this.futureOrders.remove(order);
 		order.setStatus(OrderStatus.AWAITING_PICKUP);
 	}
 
