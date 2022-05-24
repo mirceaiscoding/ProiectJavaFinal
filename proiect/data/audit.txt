@@ -31,3 +31,5 @@ Prepared order: id: fe1f4522-7145-40ff-9926-3ffcedd913ec: 2022-05-20 18:47
 Picked up order: id: fe1f4522-7145-40ff-9926-3ffcedd913ec driver: Mihai: 2022-05-20 18:47
 Completed order: id: ddb8a1be-39b8-4790-8ee9-2f815cdb3fef: 2022-05-20 18:48
 Get user account balance: id: 0d0b631e-93ca-42da-b1c5-03adf174145a balance: 301.000000: 2022-05-20 18:48
+Deleted order: id: ddb8a1be-39b8-4790-8ee9-2f815cdb3fef: 2022-05-24 14:34
+Deleted order: id: fe1f4522-7145-40ff-9926-3ffcedd913ec: 2022-05-24 14:34

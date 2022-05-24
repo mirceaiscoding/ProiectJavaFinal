@@ -1,13 +1,12 @@
 package app;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import app.database.DatabaseConfiguration;
+import app.database.DatabaseInitializer;
 import app.database.services.BusinessDatabaseService;
 import app.database.services.DriverDatabaseService;
 import app.database.services.ICRUDService;
@@ -34,7 +33,7 @@ public class Main {
 			"Add user", "Add Business", "Add driver",
 			"Get user account balance", "Add founds", "Add product to business",
 			"Place order", "Prepare order", "Find driver to pickup order", "Deliver order", "Get order and tip",
-			"Exit" };
+			"Delete order", "Exit" };
 	
 	private static void printCommands() {
 		for (int i = 0; i < COMMANDS.length; i++) {
@@ -75,12 +74,13 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		// Try with resources automatically closes the resource after
-		try (Connection connection = DatabaseConfiguration.getDatabaseConnection()){
+		try {
 			
 			Scanner scanner = new Scanner(System.in);
 			
 			IActionsService actionsService = ActionsService.getInstance();
+			
+			DatabaseInitializer.createTables();
 			
 			ICRUDService<Business> businessDatabaseService = BusinessDatabaseService.getInstance();
 			ICRUDService<User> userDatabaseService = UserDatabaseService.getInstance();
@@ -340,6 +340,20 @@ public class Main {
 						}
 						break;
 					case 11:
+						// Delete order
+						List<Order> orders = orderDatabaseService.read();
+						Order orderToDelete = pickOrder(scanner, orders);
+						try {
+							orderDatabaseService.delete(orderToDelete);
+							printDelimiter();
+							System.out.println("Deleted order: " + orderToDelete);
+							auditService.logMessage(String.format("Deleted order: id: %s", orderToDelete.getId().toString()));
+							printDelimiter();
+						} catch (Exception e) {
+							System.out.println("Couldn't delete order");
+						}
+						break;
+					case 12:
 						// Exit
 						System.out.println("Exit app");
 						return;

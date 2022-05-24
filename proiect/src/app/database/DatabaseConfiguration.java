@@ -6,14 +6,9 @@ import java.sql.SQLException;
 
 public class DatabaseConfiguration {
 
-	private static final String dbName = "foodDelivery";
-	private static final String dbUserName = "root";
-	private static final String dbPassword = "Parola123!";
-	private static final String connectionString = 
-			"jdbc:mysql://localhost/" + dbName +
-			"?user=" + dbUserName +
-			"&password=" + dbPassword + 
-			"&useUnicode=true&characterEncoding=UTF-8";
+	private static final String DB_USER = "root";
+	private static final String DB_PASSWORD = "Parola123!";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/foodDelivery";
 	
 
     private static Connection databaseConnection;
@@ -32,7 +27,7 @@ public class DatabaseConfiguration {
 
         try {
             if (databaseConnection == null || databaseConnection.isClosed()) {
-                databaseConnection = DriverManager.getConnection(connectionString);
+                databaseConnection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             }
         } catch (SQLException e) {
             e.printStackTrace();
